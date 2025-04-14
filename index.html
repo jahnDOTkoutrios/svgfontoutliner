@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Font Typing</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'RiformaMonoLL';
+            src: url('RiformaMonoLL-Regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'RiformaMonoLL', monospace;
+            max-width: 100%;
+            margin: 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s ease;
+            font-size: 14px;
+            font-weight: normal;
+            box-sizing: border-box;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        body.dark {
+            background-color: #1a1a1a;
+        }
+        .container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        #textInput {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: white;
+            font-family: 'RiformaMonoLL', monospace;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            outline: none;
+            font-weight: normal;
+        }
+        body.dark #textInput {
+            background-color: #2a2a2a;
+            color: #fff;
+        }
+        #svgContainer {
+            width: 100%;
+            flex: 1;
+            border: none;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: white;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        body.dark #svgContainer {
+            background-color: #2a2a2a;
+        }
+        .controls {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 10px;
+            padding: 0;
+            background-color: transparent;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            border: none;
+            position: relative;
+        }
+        body.dark .controls {
+            background-color: transparent;
+        }
+        .control-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 0;
+            border: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        body.dark .control-section {
+            background-color: #2a2a2a;
+        }
+        .control-section h3 {
+            margin: 0 0 16px 0;
+            font-size: 12px;
+            color: #666;
+            padding-bottom: 0;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        body.dark .control-section h3 {
+            color: #999;
+            font-weight: normal;
+        }
+        .control-group {
+            display: grid;
+            grid-template-columns: 50px 1fr;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .control-group label {
+            font-size: 11px;
+            color: #666;
+            transition: color 0.3s ease;
+            text-align: left;
+            font-family: 'RiformaMonoLL', monospace;
+            font-weight: normal;
+        }
+        body.dark .control-group label {
+            color: #999;
+        }
+        .control-group input[type="range"] {
+            width: 150px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: #e0e0e0;
+            border-radius: 2px;
+            outline: none;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        body.dark .control-group input[type="range"] {
+            background: #404040;
+        }
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 10px;
+            height: 10px;
+            background: #0066ff;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .control-group input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+        .control-group span {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            transition: color 0.3s ease;
+            font-family: 'RiformaMonoLL', monospace;
+            font-weight: normal;
+        }
+        body.dark .control-group span {
+            color: #999;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 1px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e0e0e0;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        }
+        body.dark .slider {
+            background-color: #404040;
+        }
+        input:checked + .slider {
+            background-color: #0066ff;
+        }
+        body.dark input:checked + .slider {
+            background-color: #0066ff;
+        }
+        .slider:hover {
+            transform: scale(1.1);
+        }
+        .export-buttons {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+            justify-content: flex-end;
+        }
+        .export-btn {
+            background-color: #0066ff;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'RiformaMonoLL', monospace;
+            font-weight: normal;
+        }
+        .export-btn:hover {
+            background-color: #0052cc;
+            transform: translateY(-1px);
+        }
+        body.dark .export-btn {
+            background-color: #0066ff;
+        }
+        body.dark .export-btn:hover {
+            background-color: #0052cc;
+        }
+        .control-group select {
+            width: 155px;
+            height: 22px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            padding: 0 8px;
+            font-size: 11px;
+            color: #666;
+            font-family: 'RiformaMonoLL', monospace;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            outline: none;
+        }
+        body.dark .control-group select {
+            background-color: #404040;
+            color: #999;
+        }
+        .control-group select:focus {
+            background-color: #d0d0d0;
+        }
+        body.dark .control-group select:focus {
+            background-color: #505050;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="textInput" placeholder="Type here..." value="SVG FONTS">
+        
+        <div class="controls">
+            <div class="control-section">
+                <h3>Basics</h3>
+                <div class="control-group">
+                    <label for="fontSize">Size</label>
+                    <input type="range" id="fontSize" min="50" max="500" step="10" value="200">
+                </div>
+                <div class="control-group">
+                    <label for="spacing">Space</label>
+                    <input type="range" id="spacing" min="0.5" max="2" step="0.1" value="1">
+                </div>
+                <div class="control-group">
+                    <label for="capsLock">Caps</label>
+                    <label class="switch">
+                        <input type="checkbox" id="capsLock" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Markers</h3>
+                <div class="control-group">
+                    <label for="dotDensity">Density</label>
+                    <input type="range" id="dotDensity" min="0.1" max="50" step="0.1" value="20">
+                </div>
+                <div class="control-group">
+                    <label for="dotSize">Size</label>
+                    <input type="range" id="dotSize" min="1" max="10" step="0.5" value="2">
+                </div>
+                <div class="control-group">
+                    <label for="crossThickness">Cross</label>
+                    <input type="range" id="crossThickness" min="1" max="10" step="0.5" value="1">
+                </div>
+                <div class="control-group">
+                    <label for="strokeWidth">Stroke</label>
+                    <input type="range" id="strokeWidth" min="1" max="20" step="0.5" value="5">
+                </div>
+                <div class="control-group">
+                    <label for="markerType">Type</label>
+                    <label class="switch">
+                        <input type="checkbox" id="markerType">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label for="showPath">Path</label>
+                    <label class="switch">
+                        <input type="checkbox" id="showPath">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label for="rotate">Rotate</label>
+                    <label class="switch">
+                        <input type="checkbox" id="rotate">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Grid</h3>
+                <div class="control-group">
+                    <label for="gridSize">Size</label>
+                    <input type="range" id="gridSize" min="5" max="50" step="1" value="20">
+                </div>
+                <div class="control-group">
+                    <label for="gridPull">Pull</label>
+                    <input type="range" id="gridPull" min="0" max="100" step="1" value="0">
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Animation</h3>
+                <div class="control-group">
+                    <label for="animSpeed">Speed</label>
+                    <input type="range" id="animSpeed" min="0" max="100" step="1" value="0">
+                </div>
+                <div class="control-group">
+                    <label for="animAmp">Amp</label>
+                    <input type="range" id="animAmp" min="0" max="500" step="1" value="0">
+                </div>
+                <div class="control-group">
+                    <label for="animType">Type</label>
+                    <select id="animType">
+                        <option value="wave">Wave</option>
+                        <option value="pulse">Pulse</option>
+                        <option value="spiral">Spiral</option>
+                        <option value="bounce">Bounce</option>
+                        <option value="random">Random</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="animPos">Pos</label>
+                    <label class="switch">
+                        <input type="checkbox" id="animPos" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label for="animGridSize">Grid</label>
+                    <input type="range" id="animGridSize" min="0" max="100" step="1" value="0">
+                </div>
+                <div class="control-group">
+                    <label for="animGridPull">Pull</label>
+                    <input type="range" id="animGridPull" min="0" max="100" step="1" value="0">
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>Theme</h3>
+                <div class="control-group">
+                    <label for="colorMode">Color</label>
+                    <label class="switch">
+                        <input type="checkbox" id="colorMode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label for="colorPalette">Palette</label>
+                    <select id="colorPalette">
+                        <option value="neon">Neon</option>
+                        <option value="red">Red</option>
+                        <option value="black">Black</option>
+                        <option value="pastel">Pastel</option>
+                        <option value="nature">Nature</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="darkMode">Theme</label>
+                    <label class="switch">
+                        <input type="checkbox" id="darkMode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div id="svgContainer"></div>
+    </div>
+
+    <div class="export-buttons">
+        <button id="exportStatic" class="export-btn">SVG</button>
+    </div>
+
+    <script>
+        let fontData = {};
+        let charColors = {};
+        const svgContainer = document.getElementById('svgContainer');
+        const textInput = document.getElementById('textInput');
+        const fontSizeSlider = document.getElementById('fontSize');
+        const dotDensitySlider = document.getElementById('dotDensity');
+        const dotSizeSlider = document.getElementById('dotSize');
+        const strokeWidthSlider = document.getElementById('strokeWidth');
+        const markerTypeSwitch = document.getElementById('markerType');
+        const showPathSwitch = document.getElementById('showPath');
+        const capsLockSwitch = document.getElementById('capsLock');
+        const colorModeSwitch = document.getElementById('colorMode');
+        const crossThicknessSlider = document.getElementById('crossThickness');
+        const rotateSwitch = document.getElementById('rotate');
+        const spacingSlider = document.getElementById('spacing');
+        const darkModeSwitch = document.getElementById('darkMode');
+        const gridSizeSlider = document.getElementById('gridSize');
+        const gridPullSlider = document.getElementById('gridPull');
+        const animSpeedSlider = document.getElementById('animSpeed');
+        const animAmpSlider = document.getElementById('animAmp');
+        const animTypeSelect = document.getElementById('animType');
+        const animPosSwitch = document.getElementById('animPos');
+        const animGridSizeSlider = document.getElementById('animGridSize');
+        const animGridPullSlider = document.getElementById('animGridPull');
+        let animationFrame = null;
+        let startTime = null;
+
+        const exportStaticBtn = document.getElementById('exportStatic');
+
+        // Update display on input changes
+        fontSizeSlider.addEventListener('input', updateDisplay);
+        dotDensitySlider.addEventListener('input', updateDisplay);
+        dotSizeSlider.addEventListener('input', updateDisplay);
+        strokeWidthSlider.addEventListener('input', updateDisplay);
+        markerTypeSwitch.addEventListener('change', updateDisplay);
+        showPathSwitch.addEventListener('change', updateDisplay);
+        capsLockSwitch.addEventListener('change', updateDisplay);
+        colorModeSwitch.addEventListener('change', () => {
+            generateColors();
+            updateDisplay();
+        });
+        crossThicknessSlider.addEventListener('input', updateDisplay);
+        rotateSwitch.addEventListener('change', updateDisplay);
+        spacingSlider.addEventListener('input', updateDisplay);
+        darkModeSwitch.addEventListener('change', () => {
+            document.body.classList.toggle('dark');
+        });
+        gridSizeSlider.addEventListener('input', updateDisplay);
+        gridPullSlider.addEventListener('input', updateDisplay);
+        animSpeedSlider.addEventListener('input', () => {
+            if (parseFloat(animSpeedSlider.value) === 0) {
+                cancelAnimationFrame(animationFrame);
+                updateDisplay();
+            } else {
+                startAnimation();
+            }
+        });
+        animAmpSlider.addEventListener('input', updateDisplay);
+        animTypeSelect.addEventListener('change', updateDisplay);
+        animPosSwitch.addEventListener('change', updateDisplay);
+        animGridSizeSlider.addEventListener('input', updateDisplay);
+        animGridPullSlider.addEventListener('change', updateDisplay);
+
+        // Handle text input with caps lock
+        textInput.addEventListener('input', (e) => {
+            if (capsLockSwitch.checked) {
+                textInput.value = textInput.value.toUpperCase();
+            }
+            generateColors();
+            updateDisplay();
+        });
+
+        function generateColors() {
+            charColors = {};
+            if (colorModeSwitch.checked) {
+                Array.from(textInput.value).forEach(char => {
+                    if (fontData[char]) {
+                        charColors[char] = getRandomColor();
+                    }
+                });
+            }
+        }
+
+        // Load and parse the SVG font
+        fetch('New Font.svg')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(svgText => {
+                // Parse the SVG document
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+                
+                // Find all glyph elements
+                const glyphs = svgDoc.querySelectorAll('glyph');
+                
+                // Extract path data for each character
+                glyphs.forEach(glyph => {
+                    const unicode = glyph.getAttribute('unicode');
+                    if (unicode && unicode.length === 1) {
+                        const char = unicode;
+                        const path = glyph.getAttribute('d');
+                        const width = parseFloat(glyph.getAttribute('horiz-adv-x') || '1000');
+                        
+                        if (path) {
+                            fontData[char] = {
+                                path: path,
+                                width: width
+                            };
+                        }
+                    }
+                });
+                
+                generateColors();
+                updateDisplay();
+            })
+            .catch(error => {
+                console.error('Error loading SVG font:', error);
+            });
+
+        function getPointsAlongPath(path, spacing) {
+            if (!path) return [];
+            
+            const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathElement.setAttribute('d', path);
+            const length = pathElement.getTotalLength();
+            
+            // Invert and scale the spacing value for wider range
+            const adjustedSpacing = (51 - spacing) * 2; // Convert from 0.1-50 to 101.8-2
+            const numPoints = Math.ceil(length / adjustedSpacing);
+            const points = [];
+            
+            // Calculate the exact step size for even distribution
+            const step = length / (numPoints - 1);
+            
+            // Get points at regular intervals
+            for (let i = 0; i < numPoints; i++) {
+                const point = pathElement.getPointAtLength(i * step);
+                points.push(point);
+            }
+            
+            return points;
+        }
+
+        const colorPaletteSelect = document.getElementById('colorPalette');
+
+        colorPaletteSelect.addEventListener('change', () => {
+            generateColors();
+            updateDisplay();
+        });
+
+        const COLOR_PALETTES = {
+            neon: [
+                '#00ff00', // Neon Green
+                '#ff00ff', // Neon Pink
+                '#00ffff', // Neon Cyan
+                '#ff0000', // Neon Red
+                '#ffff00', // Neon Yellow
+                '#ff8800', // Neon Orange
+            ],
+            red: [
+                '#FF0000', // Pure Red
+            ],
+            black: [
+                '#000000', // Pure Black
+                '#222222', // Dark Gray
+                '#444444', // Medium Gray
+                '#666666', // Light Gray
+                '#888888', // Lighter Gray
+            ],
+            pastel: [
+                '#FFB3BA', // Pastel Pink
+                '#BAFFC9', // Pastel Green
+                '#BAE1FF', // Pastel Blue
+                '#FFFFBA', // Pastel Yellow
+                '#FFB3FF', // Pastel Purple
+                '#FFE4B5', // Pastel Orange
+            ],
+            nature: [
+                '#2D5A27', // Forest Green
+                '#8B4513', // Saddle Brown
+                '#1E4D2B', // Dark Green
+                '#A0522D', // Sienna
+                '#006400', // Dark Green
+                '#8FBC8F', // Dark Sea Green
+            ],
+        };
+
+        function getRandomColor() {
+            const palette = COLOR_PALETTES[colorPaletteSelect.value];
+            return palette[Math.floor(Math.random() * palette.length)];
+        }
+
+        // Add a variable to track the current rotation angle
+        let currentRotation = 45; // Start with 45°
+
+        function createMarker(x, y, size, isCross, color, crossThickness, rotate, pathAngle) {
+            if (isCross) {
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                let rotation = 0;
+                if (rotate) rotation = 45; // Default to 45° when rotate is true
+                
+                if (rotation !== 0) {
+                    group.setAttribute('transform', `rotate(${rotation},${x},${y})`);
+                }
+                
+                // Create horizontal line
+                const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line1.setAttribute('x1', x - size);
+                line1.setAttribute('y1', y);
+                line1.setAttribute('x2', x + size);
+                line1.setAttribute('y2', y);
+                line1.setAttribute('stroke', color);
+                line1.setAttribute('stroke-width', crossThickness);
+                
+                // Create vertical line
+                const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line2.setAttribute('x1', x);
+                line2.setAttribute('y1', y - size);
+                line2.setAttribute('x2', x);
+                line2.setAttribute('y2', y + size);
+                line2.setAttribute('stroke', color);
+                line2.setAttribute('stroke-width', crossThickness);
+                
+                group.appendChild(line1);
+                group.appendChild(line2);
+                return group;
+            } else {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', size);
+                circle.setAttribute('fill', color);
+                return circle;
+            }
+        }
+
+        function snapToGrid(x, y, gridSize, pullStrength) {
+            if (pullStrength === 0) return { x, y };
+            
+            const gridX = Math.round(x / gridSize) * gridSize;
+            const gridY = Math.round(y / gridSize) * gridSize;
+            
+            // Calculate the pull based on strength (0-100)
+            const pull = pullStrength / 100;
+            
+            return {
+                x: x + (gridX - x) * pull,
+                y: y + (gridY - y) * pull
+            };
+        }
+
+        function startAnimation() {
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+            }
+            startTime = performance.now();
+            animate();
+        }
+
+        function animate() {
+            updateDisplay();
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        function getAnimationOffset(x, y, time, speed, amplitude, type) {
+            if (speed === 0 || amplitude === 0) return { x: 0, y: 0 };
+            
+            const normalizedSpeed = speed / 10;
+            const normalizedAmp = amplitude / 20; // Adjusted for larger amplitude range
+            
+            switch(type) {
+                case 'wave':
+                    // Wave animation with position-based phase offset
+                    const phaseX = x * 0.02;
+                    const phaseY = y * 0.02;
+                    return {
+                        x: Math.sin(time * normalizedSpeed + phaseX) * normalizedAmp,
+                        y: Math.cos(time * normalizedSpeed + phaseY) * normalizedAmp
+                    };
+                
+                case 'pulse':
+                    // Pulse animation with position-based phase offset
+                    const phase = (x + y) * 0.01;
+                    const pulse = Math.sin(time * normalizedSpeed + phase) * normalizedAmp;
+                    return {
+                        x: pulse,
+                        y: pulse
+                    };
+                
+                case 'spiral':
+                    // Spiral animation
+                    const angle = time * normalizedSpeed + (x + y) * 0.01;
+                    const radius = normalizedAmp * (1 + Math.sin(time * normalizedSpeed * 0.5) * 0.5);
+                    return {
+                        x: Math.cos(angle) * radius,
+                        y: Math.sin(angle) * radius
+                    };
+                
+                case 'bounce':
+                    // Bounce animation
+                    const bounceX = Math.abs(Math.sin(time * normalizedSpeed + x * 0.01)) * normalizedAmp;
+                    const bounceY = Math.abs(Math.sin(time * normalizedSpeed * 1.2 + y * 0.01)) * normalizedAmp;
+                    return {
+                        x: bounceX,
+                        y: bounceY
+                    };
+                
+                case 'random':
+                    // Random but smooth movement
+                    const randomX = Math.sin(time * normalizedSpeed + x * 0.01) * 
+                                  Math.cos(time * normalizedSpeed * 0.7 + y * 0.01) * normalizedAmp;
+                    const randomY = Math.cos(time * normalizedSpeed + y * 0.01) * 
+                                  Math.sin(time * normalizedSpeed * 0.7 + x * 0.01) * normalizedAmp;
+                    return {
+                        x: randomX,
+                        y: randomY
+                    };
+                
+                default:
+                    return { x: 0, y: 0 };
+            }
+        }
+
+        function getAnimationRotation(time, speed) {
+            if (speed === 0) return 0;
+            const normalizedSpeed = speed / 10;
+            return Math.sin(time * normalizedSpeed) * 30; // Rotate up to 30 degrees
+        }
+
+        function updateDisplay() {
+            if (Object.keys(fontData).length === 0) return;
+            
+            // Clear previous content
+            svgContainer.innerHTML = '';
+            
+            // Create a new SVG element
+            const newSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            newSvg.setAttribute('width', '100%');
+            newSvg.setAttribute('height', '100%');
+            newSvg.setAttribute('viewBox', '0 0 1200 600');
+            newSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+            
+            // Calculate total width of all characters including spaces
+            let totalWidth = 0;
+            Array.from(textInput.value).forEach(char => {
+                if (char === ' ') {
+                    totalWidth += 200 * parseFloat(fontSizeSlider.value) / 1000 * parseFloat(spacingSlider.value);
+                } else if (fontData[char]) {
+                    totalWidth += fontData[char].width * parseFloat(fontSizeSlider.value) / 1000 * parseFloat(spacingSlider.value);
+                }
+            });
+            
+            // Start x position at center minus half the total width
+            let x = 600 - (totalWidth / 2);
+            const y = 300;
+            const fontSize = parseFloat(fontSizeSlider.value);
+            const scale = fontSize / 1000;
+            const dotSpacing = parseFloat(dotDensitySlider.value);
+            const dotSize = parseFloat(dotSizeSlider.value);
+            const strokeWidth = parseFloat(strokeWidthSlider.value);
+            const isCross = markerTypeSwitch.checked;
+            const showPath = showPathSwitch.checked;
+            const isRGB = colorModeSwitch.checked;
+            const crossThickness = parseFloat(crossThicknessSlider.value);
+            const rotate = rotateSwitch.checked;
+            let gridSize = parseFloat(gridSizeSlider.value);
+            let gridPull = parseFloat(gridPullSlider.value);
+            const animSpeed = parseFloat(animSpeedSlider.value);
+            const animAmp = parseFloat(animAmpSlider.value);
+            const animationType = animTypeSelect.value;
+            const animPos = animPosSwitch.checked;
+            const animGridSize = animGridSizeSlider.value > 0;
+            const animGridPull = animGridPullSlider.value > 0;
+            const time = startTime ? (performance.now() - startTime) / 1000 : 0;
+            
+            // Animate grid size if enabled
+            if (animGridSize && animSpeed > 0) {
+                const normalizedSpeed = animSpeed / 10;
+                const minSize = 5;
+                const maxSize = 50;
+                const range = maxSize - minSize;
+                const baseSize = parseFloat(gridSizeSlider.value);
+                const animAmount = parseFloat(animGridSizeSlider.value) / 100;
+                gridSize = baseSize + (Math.sin(time * normalizedSpeed) * 0.5 + 0.5) * range * animAmount;
+            }
+
+            // Animate grid pull if enabled
+            if (animGridPull && animSpeed > 0) {
+                const normalizedSpeed = animSpeed / 10;
+                const basePull = parseFloat(gridPullSlider.value);
+                const animAmount = parseFloat(animGridPullSlider.value) / 100;
+                gridPull = basePull + Math.abs(Math.sin(time * normalizedSpeed)) * 100 * animAmount;
+            }
+            
+            // Create path for each character
+            Array.from(textInput.value).forEach(char => {
+                if (char === ' ') {
+                    // Add space width
+                    x += 200 * scale * parseFloat(spacingSlider.value);
+                } else if (fontData[char]) {
+                    const charWidth = fontData[char].width * scale * parseFloat(spacingSlider.value);
+                    let color = isRGB ? charColors[char] : 'black';
+                    
+                    // Create the main path if enabled
+                    if (showPath) {
+                        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                        path.setAttribute('d', fontData[char].path);
+                        path.setAttribute('transform', `translate(${x},${y}) scale(${scale},-${scale})`);
+                        path.setAttribute('fill', 'none');
+                        path.setAttribute('stroke', color);
+                        path.setAttribute('stroke-width', strokeWidth);
+                        newSvg.appendChild(path);
+                    }
+
+                    // Create markers along the path with even spacing
+                    const points = getPointsAlongPath(fontData[char].path, dotSpacing);
+                    points.forEach((point, index) => {
+                        let dotX = x + point.x * scale;
+                        let dotY = y - point.y * scale;
+                        
+                        // Apply grid snapping if pull strength > 0
+                        if (gridPull > 0) {
+                            const snapped = snapToGrid(dotX, dotY, gridSize, gridPull);
+                            dotX = snapped.x;
+                            dotY = snapped.y;
+                        }
+                        
+                        // Apply position animation if enabled
+                        if (animPos && animSpeed > 0) {
+                            const animOffset = getAnimationOffset(dotX, dotY, time, animSpeed, animAmp, animationType);
+                            dotX += animOffset.x;
+                            dotY += animOffset.y;
+                        }
+                        
+                        const marker = createMarker(dotX, dotY, dotSize, isCross, color, crossThickness, rotate, 0);
+                        newSvg.appendChild(marker);
+                    });
+                    
+                    x += charWidth;
+                }
+            });
+            
+            svgContainer.appendChild(newSvg);
+        }
+
+        // Initialize animation if speed is not zero
+        if (parseFloat(animSpeedSlider.value) > 0) {
+            startAnimation();
+        }
+
+        // Set default values
+        darkModeSwitch.checked = true;
+        document.body.classList.add('dark');
+        
+        colorModeSwitch.checked = true;
+
+        function downloadSVG(svgString, filename) {
+            const blob = new Blob([svgString], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function getCurrentSVG() {
+            const svg = svgContainer.querySelector('svg');
+            return svg ? svg.outerHTML : '';
+        }
+
+        exportStaticBtn.addEventListener('click', () => {
+            const svgString = getCurrentSVG();
+            if (svgString) {
+                downloadSVG(svgString, 'svg-export.svg');
+            }
+        });
+
+        // Update the rotate switch event listener
+        rotateSwitch.addEventListener('change', () => {
+            currentRotation = currentRotation === 45 ? 90 : 45; // Toggle between 45° and 90°
+            updateDisplay();
+        });
+    </script>
+</body>
+</html> 
