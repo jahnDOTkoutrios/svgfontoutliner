@@ -445,6 +445,7 @@
                     <div style="display: flex; gap: 8px; align-items: center;">
                         <label id="markerTypeDots" class="type-text active">Dots</label>
                         <label id="markerTypeCrosses" class="type-text">Crosses</label>
+                        <label id="markerTypeHeart" class="type-text">Heart</label>
                         <label for="customMarker" class="type-text">
                             <input type="file" id="customMarker" accept=".svg" style="display: none;">
                             Custom
@@ -636,6 +637,7 @@
                         <option value="rainbow">Rainbow</option>
                         <option value="fire">Fire</option>
                         <option value="ice">Ice</option>
+                        <option value="pink">Pink</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -671,6 +673,7 @@
 
     <div class="export-buttons">
         <button id="exportStatic" class="export-btn">SVG</button>
+        <button id="exportSettings" class="export-btn">LOG</button>
     </div>
 
     <script>
@@ -725,6 +728,7 @@
         let morphDirection = 1;
 
         const exportStaticBtn = document.getElementById('exportStatic');
+        const exportSettingsBtn = document.getElementById('exportSettings');
 
         // Update display on input changes
         fontSizeSlider.addEventListener('input', updateDisplay);
@@ -993,6 +997,20 @@
                 '#ffff00', // Neon Yellow
                 '#ff8800', // Neon Orange
             ],
+            pink: [
+                '#FFC0CB', // Pink
+                '#FFB6C1', // Light Pink
+                '#FF69B4', // Hot Pink
+                '#FF1493', // Deep Pink
+                '#FF69B4', // Hot Pink
+                '#FFB6C1', // Light Pink
+                '#FFC0CB', // Pink
+                '#FFB6C1', // Light Pink
+                '#FF69B4', // Hot Pink
+                '#FF1493', // Deep Pink
+                '#FF69B4', // Hot Pink
+                '#FFB6C1', // Light Pink
+            ],
             red: [
                 '#FF0000', // Pure Red
             ],
@@ -1119,10 +1137,18 @@
                 '#BBDEFB', // Light Blue
                 '#E3F2FD', // Lightest Blue
             ],
+            heart: [
+                '#FF0000', // Red
+                '#FF69B4', // Hot Pink
+                '#FF1493', // Deep Pink
+                '#FFC0CB', // Pink
+                '#FF69B4', // Hot Pink
+                '#FF0000', // Red
+            ],
         };
 
         function createMarker(x, y, size, isCross, color, crossThickness, rotate, pathAngle) {
-            if (markerType === 2 && customMarkerSVG) {
+            if (markerType === 3 && customMarkerSVG) {
                 const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
                 // Get the viewBox of the original SVG
@@ -1226,6 +1252,68 @@
                 group.appendChild(newSvg);
 
                 return group;
+            } else if (markerType === 2) {
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+                // Create heart shape
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const scale = size / 20; // Scale the heart to match the size parameter
+                
+                // Heart path data
+                path.setAttribute('d', `M${x},${y - 5 * scale} 
+                    C${x - 5 * scale},${y - 10 * scale} 
+                    ${x - 10 * scale},${y - 5 * scale} 
+                    ${x - 10 * scale},${y} 
+                    C${x - 10 * scale},${y + 5 * scale} 
+                    ${x},${y + 10 * scale} 
+                    ${x},${y + 10 * scale} 
+                    C${x},${y + 10 * scale} 
+                    ${x + 10 * scale},${y + 5 * scale} 
+                    ${x + 10 * scale},${y} 
+                    C${x + 10 * scale},${y - 5 * scale} 
+                    ${x + 5 * scale},${y - 10 * scale} 
+                    ${x},${y - 5 * scale} 
+                    Z`);
+                
+                if (gradientFillSwitch.checked) {
+                    // Create a unique ID for the gradient
+                    const gradientId = `gradient-${x}-${y}-heart`;
+    
+                    // Create the gradient definition
+                    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
+                    gradient.setAttribute('id', gradientId);
+                    gradient.setAttribute('cx', '50%');
+                    gradient.setAttribute('cy', '50%');
+                    gradient.setAttribute('r', '50%');
+                    gradient.setAttribute('fx', '50%');
+                    gradient.setAttribute('fy', '50%');
+    
+                    // Add gradient stops
+                    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop1.setAttribute('offset', '0%');
+                    stop1.setAttribute('stop-color', color);
+                    stop1.setAttribute('stop-opacity', invertGradientSwitch.checked ? '0.3' : '1');
+    
+                    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop2.setAttribute('offset', '100%');
+                    stop2.setAttribute('stop-color', color);
+                    stop2.setAttribute('stop-opacity', invertGradientSwitch.checked ? '1' : '0.3');
+    
+                    gradient.appendChild(stop1);
+                    gradient.appendChild(stop2);
+    
+                    // Add gradient to defs
+                    const defs = svgContainer.querySelector('svg defs');
+                    defs.appendChild(gradient);
+    
+                    // Apply gradient to path
+                    path.setAttribute('fill', `url(#${gradientId})`);
+                } else {
+                    path.setAttribute('fill', color);
+                }
+                
+                group.appendChild(path);
+                return group;
             } else if (markerType === 1) {
                 const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
@@ -1305,15 +1393,17 @@
         }
 
         // Update the marker type state and event listeners
-        let markerType = 0; // 0 = dots, 1 = crosses, 2 = custom SVG
+        let markerType = 0; // 0 = dots, 1 = crosses, 2 = heart, 3 = custom SVG
         const markerTypeDots = document.getElementById('markerTypeDots');
         const markerTypeCrosses = document.getElementById('markerTypeCrosses');
+        const markerTypeHeart = document.getElementById('markerTypeHeart');
         const markerTypeCustom = document.querySelector('label[for="customMarker"]');
 
         function updateMarkerTypeUI() {
             markerTypeDots.classList.toggle('active', markerType === 0);
             markerTypeCrosses.classList.toggle('active', markerType === 1);
-            markerTypeCustom.classList.toggle('active', markerType === 2);
+            markerTypeHeart.classList.toggle('active', markerType === 2);
+            markerTypeCustom.classList.toggle('active', markerType === 3);
         }
 
         markerTypeDots.addEventListener('click', () => {
@@ -1328,9 +1418,15 @@
             updateDisplay();
         });
 
+        markerTypeHeart.addEventListener('click', () => {
+            markerType = 2;
+            updateMarkerTypeUI();
+            updateDisplay();
+        });
+
         markerTypeCustom.addEventListener('click', () => {
             if (customMarkerSVG) {
-                markerType = 2;
+                markerType = 3;
                 updateMarkerTypeUI();
                 updateDisplay();
             }
@@ -1890,14 +1986,105 @@
 
         function getCurrentSVG() {
             const svg = svgContainer.querySelector('svg');
-            return svg ? svg.outerHTML : '';
+            // Create a clone of the SVG to avoid affecting the display
+            const exportSvg = svg.cloneNode(true);
+            
+            // Add timestamp to SVG
+            const timestamp = new Date().toISOString();
+            const comment = document.createComment(` Generated on ${timestamp} `);
+            exportSvg.insertBefore(comment, exportSvg.firstChild);
+            
+            // Add viewBox and preserveAspectRatio attributes for better compatibility
+            exportSvg.setAttribute('width', '1200');
+            exportSvg.setAttribute('height', '600');
+            exportSvg.setAttribute('viewBox', '0 0 1200 600');
+            exportSvg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+            exportSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            exportSvg.setAttribute('version', '1.1');
+            
+            return exportSvg ? exportSvg.outerHTML : '';
+        }
+
+        function getCurrentSettings() {
+            const settings = {
+                text: {
+                    firstWord: textInput.value,
+                    secondWord: textInput2.value,
+                    fontSize: fontSizeSlider.value,
+                    spacing: spacingSlider.value,
+                    yOffset: yOffsetSlider.value,
+                    capsLock: capsLockSwitch.checked,
+                },
+                markers: {
+                    density: dotDensitySlider.value,
+                    size: dotSizeSlider.value,
+                    crossThickness: crossThicknessSlider.value,
+                    strokeWidth: strokeWidthSlider.value,
+                    strokeJoin: strokeJoinSelect.value,
+                    pathColor: pathColorSelect.value,
+                    pathZIndex: pathZIndexSwitch.checked,
+                    showPath: showPathSwitch.checked,
+                    showMarkers: showMarkersSwitch.checked,
+                    markerType: markerType,
+                },
+                grid: {
+                    size: gridSizeSlider.value,
+                    pull: gridPullSlider.value,
+                    show: showGridSwitch.checked,
+                    color: gridColorSelect.value,
+                    stroke: gridStrokeSlider.value,
+                    offset: gridOffsetSwitch.checked,
+                },
+                animation: {
+                    speed: animSpeedSlider.value,
+                    amplitude: animAmpSlider.value,
+                    type: animTypeSelect.value,
+                    position: animPosSwitch.checked,
+                    gridSize: animGridSizeSlider.value,
+                    gridPull: animGridPullSlider.value,
+                    colorOffset: animColorOffsetSlider.value,
+                },
+                theme: {
+                    colorMode: colorModeSwitch.checked,
+                    palette: colorPaletteSelect.value,
+                    colorCount: colorCountSlider.value,
+                    individualColors: individualColorsSwitch.checked,
+                    orderedColors: orderedColorsSwitch.checked,
+                    darkMode: darkModeSwitch.checked,
+                },
+                morph: {
+                    amount: morphAmountSlider.value,
+                    individual: individualMorphSwitch.checked,
+                    speed: morphSpeedSlider.value,
+                }
+            };
+            return JSON.stringify(settings, null, 2);
+        }
+
+        function downloadSettings(settingsString, filename) {
+            const blob = new Blob([settingsString], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         exportStaticBtn.addEventListener('click', () => {
             const svgString = getCurrentSVG();
             if (svgString) {
-                downloadSVG(svgString, 'svg-export.svg');
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                downloadSVG(svgString, `svg-export-${timestamp}.svg`);
             }
+        });
+
+        exportSettingsBtn.addEventListener('click', () => {
+            const settingsString = getCurrentSettings();
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            downloadSettings(settingsString, `settings-${timestamp}.json`);
         });
 
         // Update colors when density changes
