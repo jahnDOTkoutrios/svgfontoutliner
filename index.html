@@ -601,6 +601,10 @@
                     <label for="animGridPull">Pull</label>
                     <input type="range" id="animGridPull" min="0" max="100" step="1" value="0">
                 </div>
+                <div class="control-group">
+                    <label for="animColorOffset">Color</label>
+                    <input type="range" id="animColorOffset" min="0" max="100" step="1" value="0">
+                </div>
             </div>
 
             <div class="control-section">
@@ -712,6 +716,7 @@
         const gridColorSelect = document.getElementById('gridColor');
         const gridStrokeSlider = document.getElementById('gridStroke');
         const gridOffsetSwitch = document.getElementById('gridOffset');
+        const animColorOffsetSlider = document.getElementById('animColorOffset');
         let customMarkerSVG = null;
         let animationFrame = null;
         let startTime = null;
@@ -861,16 +866,19 @@
         function getRandomColor() {
             const palette = COLOR_PALETTES[colorPaletteSelect.value];
             const colorCount = parseInt(colorCountSlider.value);
+            const colorOffset = parseFloat(animColorOffsetSlider.value) / 100;
             
             // If color count is less than or equal to palette length, use direct colors
             if (colorCount <= palette.length) {
-                return palette[Math.floor(Math.random() * colorCount)];
+                const offsetIndex = Math.floor(colorOffset * colorCount);
+                return palette[(offsetIndex) % colorCount];
             }
             
             const effectivePalette = getEffectivePalette(palette, colorCount);
             
             if (orderedColorsSwitch.checked && individualColorsSwitch.checked) {
-                return effectivePalette[0]; // We'll handle the cycling in generateColors
+                const offsetIndex = Math.floor(colorOffset * effectivePalette.length);
+                return effectivePalette[offsetIndex % effectivePalette.length];
             }
             return effectivePalette[Math.floor(Math.random() * effectivePalette.length)];
         }
@@ -886,11 +894,13 @@
                             const palette = COLOR_PALETTES[colorPaletteSelect.value];
                             const colorCount = parseInt(colorCountSlider.value);
                             const effectivePalette = getEffectivePalette(palette, colorCount);
+                            const colorOffset = parseFloat(animColorOffsetSlider.value) / 100;
 
                             for (let i = 0; i < points.length; i++) {
                                 if (orderedColorsSwitch.checked) {
-                                    // Cycle through palette colors in order
-                                    charColors[char][i] = effectivePalette[i % effectivePalette.length];
+                                    // Cycle through palette colors in order with offset
+                                    const offsetIndex = Math.floor((i + colorOffset * effectivePalette.length) % effectivePalette.length);
+                                    charColors[char][i] = effectivePalette[offsetIndex];
                                 } else {
                                     charColors[char][i] = getRandomColor();
                                 }
@@ -1369,6 +1379,14 @@
         }
 
         function animate() {
+            // Update color offset based on time
+            if (parseFloat(animSpeedSlider.value) > 0) {
+                const time = (performance.now() - startTime) / 1000;
+                const speed = parseFloat(animSpeedSlider.value) / 10;
+                const colorOffset = (time * speed) % 1;
+                animColorOffsetSlider.value = colorOffset * 100;
+                generateColors();
+            }
             updateDisplay();
             animationFrame = requestAnimationFrame(animate);
         }
@@ -1917,6 +1935,14 @@
             // Continue animation
             morphAnimationFrame = requestAnimationFrame(animateMorph);
         }
+
+        // Update display on input changes
+        animGridSizeSlider.addEventListener('input', updateDisplay);
+        animGridPullSlider.addEventListener('change', updateDisplay);
+        animColorOffsetSlider.addEventListener('input', () => {
+            generateColors();
+            updateDisplay();
+        });
     </script>
 </body>
 
