@@ -9,25 +9,26 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <style>
         @font-face {
-            font-family: 'RiformaMonoLL';
-            src: url('RiformaMonoLL-Regular.otf') format('opentype');
+            font-family: 'G2ErikaMono';
+            src: url('G2-Erika-Mono.otf') format('opentype');
             font-weight: normal;
             font-style: normal;
         }
 
         body {
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
             max-width: 100%;
             margin: 0;
             padding: 10px;
             background-color: #f8f9fa;
             transition: background-color 0.3s ease;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: normal;
             box-sizing: border-box;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            text-transform: uppercase;
         }
 
         body.dark {
@@ -47,16 +48,17 @@
         #textInput {
             width: 100%;
             padding: 12px;
-            font-size: 14px;
+            font-size: 12px;
             margin-bottom: 10px;
             border: none;
             border-radius: 6px;
             background-color: white;
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
             transition: all 0.3s ease;
             box-sizing: border-box;
             outline: none;
             font-weight: normal;
+            text-transform: uppercase;
         }
 
         body.dark #textInput {
@@ -67,16 +69,17 @@
         #textInput2 {
             width: 100%;
             padding: 12px;
-            font-size: 14px;
+            font-size: 12px;
             margin-bottom: 10px;
             border: none;
             border-radius: 6px;
             background-color: white;
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
             transition: all 0.3s ease;
             box-sizing: border-box;
             outline: none;
             font-weight: normal;
+            text-transform: uppercase;
         }
 
         body.dark #textInput2 {
@@ -160,12 +163,13 @@
         }
 
         .control-group label {
-            font-size: 11px;
+            font-size: 12px;
             color: #666;
             transition: color 0.3s ease;
             text-align: left;
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
             font-weight: normal;
+            text-transform: uppercase;
         }
 
         body.dark .control-group label {
@@ -191,10 +195,14 @@
             -webkit-appearance: none;
             width: 10px;
             height: 10px;
-            background: #0066ff;
+            background: #000000;
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+
+        body.dark .control-group input[type="range"]::-webkit-slider-thumb {
+            background: #FFFFFF;
         }
 
         .control-group input[type="range"]::-webkit-slider-thumb:hover {
@@ -206,8 +214,9 @@
             font-size: 12px;
             color: #666;
             transition: color 0.3s ease;
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
             font-weight: normal;
+            text-transform: uppercase;
         }
 
         body.dark .control-group span {
@@ -245,11 +254,11 @@
         }
 
         input:checked+.slider {
-            background-color: #0066ff;
+            background-color: #000000;
         }
 
         body.dark input:checked+.slider {
-            background-color: #0066ff;
+            background-color: #FFFFFF;
         }
 
         .slider:hover {
@@ -267,7 +276,7 @@
         }
 
         .export-btn {
-            background-color: #0066ff;
+            background-color: #000000;
             color: white;
             border: none;
             padding: 6px 12px;
@@ -278,21 +287,23 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
             font-weight: normal;
+            text-transform: uppercase;
         }
 
         .export-btn:hover {
-            background-color: #0052cc;
+            background-color: #333333;
             transform: translateY(-1px);
         }
 
         body.dark .export-btn {
-            background-color: #0066ff;
+            background-color: #FFFFFF;
+            color: #000000;
         }
 
         body.dark .export-btn:hover {
-            background-color: #0052cc;
+            background-color: #CCCCCC;
         }
 
         .control-group select {
@@ -302,14 +313,16 @@
             border: none;
             border-radius: 4px;
             padding: 0 8px;
-            font-size: 11px;
+            font-size: 12px;
             color: #666;
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
             cursor: pointer;
             outline: none;
+            font-weight: normal;
+            text-transform: uppercase;
         }
 
         body.dark .control-group select {
@@ -331,10 +344,12 @@
             padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 12px;
             color: #666;
             transition: all 0.3s ease;
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
+            font-weight: normal;
+            text-transform: uppercase;
         }
 
         body.dark .type-btn {
@@ -352,21 +367,23 @@
         }
 
         .type-btn.active {
-            background-color: #0066ff;
+            background-color: #000000;
             color: white;
         }
 
         body.dark .type-btn.active {
-            background-color: #0066ff;
-            color: white;
+            background-color: #FFFFFF;
+            color: #000000;
         }
 
         .type-text {
-            font-size: 11px;
+            font-size: 12px;
             color: #666;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'RiformaMonoLL', monospace;
+            font-family: 'G2ErikaMono', monospace;
+            font-weight: normal;
+            text-transform: uppercase;
         }
 
         body.dark .type-text {
@@ -374,19 +391,19 @@
         }
 
         .type-text:hover {
-            color: #0066ff;
+            color: #000000;
         }
 
         body.dark .type-text:hover {
-            color: #0066ff;
+            color: #FFFFFF;
         }
 
         .type-text.active {
-            color: #0066ff;
+            color: #000000;
         }
 
         body.dark .type-text.active {
-            color: #0066ff;
+            color: #FFFFFF;
         }
     </style>
 </head>
@@ -574,6 +591,10 @@
                     <input type="range" id="animSpeed" min="0" max="100" step="1" value="0">
                 </div>
                 <div class="control-group">
+                    <label for="animColorSpeed">C-Speed</label>
+                    <input type="range" id="animColorSpeed" min="0" max="100" step="1" value="0">
+                </div>
+                <div class="control-group">
                     <label for="animAmp">Amp</label>
                     <input type="range" id="animAmp" min="0" max="500" step="1" value="0">
                 </div>
@@ -591,6 +612,13 @@
                     <label for="animPos">Pos</label>
                     <label class="switch">
                         <input type="checkbox" id="animPos" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-group">
+                    <label for="animColor">Color</label>
+                    <label class="switch">
+                        <input type="checkbox" id="animColor" checked>
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -696,9 +724,11 @@
         const gridSizeSlider = document.getElementById('gridSize');
         const gridPullSlider = document.getElementById('gridPull');
         const animSpeedSlider = document.getElementById('animSpeed');
+        const animColorSpeedSlider = document.getElementById('animColorSpeed');
         const animAmpSlider = document.getElementById('animAmp');
         const animTypeSelect = document.getElementById('animType');
         const animPosSwitch = document.getElementById('animPos');
+        const animColorSwitch = document.getElementById('animColor');
         const animGridSizeSlider = document.getElementById('animGridSize');
         const animGridPullSlider = document.getElementById('animGridPull');
         const gradientFillSwitch = document.getElementById('gradientFill');
@@ -761,9 +791,18 @@
                 startAnimation();
             }
         });
+        animColorSpeedSlider.addEventListener('input', () => {
+            if (parseFloat(animColorSpeedSlider.value) === 0) {
+                cancelAnimationFrame(animationFrame);
+                updateDisplay();
+            } else {
+                startAnimation();
+            }
+        });
         animAmpSlider.addEventListener('input', updateDisplay);
         animTypeSelect.addEventListener('change', updateDisplay);
         animPosSwitch.addEventListener('change', updateDisplay);
+        animColorSwitch.addEventListener('change', updateDisplay);
         animGridSizeSlider.addEventListener('input', updateDisplay);
         animGridPullSlider.addEventListener('change', updateDisplay);
         gradientFillSwitch.addEventListener('change', updateDisplay);
@@ -1476,9 +1515,9 @@
 
         function animate() {
             // Update color offset based on time
-            if (parseFloat(animSpeedSlider.value) > 0) {
+            if (parseFloat(animColorSpeedSlider.value) > 0 && animColorSwitch.checked) {
                 const time = (performance.now() - startTime) / 1000;
-                const speed = parseFloat(animSpeedSlider.value) / 10;
+                const speed = parseFloat(animColorSpeedSlider.value) / 50; // Reduced speed factor
                 const colorOffset = (time * speed) % 1;
                 animColorOffsetSlider.value = colorOffset * 100;
                 generateColors();
@@ -1967,8 +2006,8 @@
         }
 
         // Set default values
-        darkModeSwitch.checked = true;
-        document.body.classList.add('dark');
+        darkModeSwitch.checked = false;
+        document.body.classList.remove('dark');
 
         colorModeSwitch.checked = true;
 
@@ -2129,6 +2168,17 @@
         animColorOffsetSlider.addEventListener('input', () => {
             generateColors();
             updateDisplay();
+        });
+
+        // Update display on input changes
+        animColorSwitch.addEventListener('change', updateDisplay);
+        animColorSpeedSlider.addEventListener('input', () => {
+            if (parseFloat(animColorSpeedSlider.value) === 0) {
+                cancelAnimationFrame(animationFrame);
+                updateDisplay();
+            } else {
+                startAnimation();
+            }
         });
     </script>
 </body>
