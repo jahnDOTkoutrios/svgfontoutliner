@@ -1,142 +1,44 @@
 # SVG Font Outliner
 
-A web-based tool for creating and animating SVG text with customizable markers, morphing effects, and grid systems.
+A web-based tool for creative SVG font exploration, animation, and export.
 
 ## Features
 
-### Basics
-
-- **Text Input**: Two text fields for creating morphing effects
-- **Font Size**: Adjustable from 50 to 1000
-- **Spacing**: Control letter spacing (0.5 to 2)
-- **Y-Offset**: Vertical position adjustment (-200 to 200)
-- **Morph Controls**:
-  - Morph amount (0-100%)
-  - Morph speed
-  - Individual letter morphing
-- **Caps Lock**: Toggle uppercase text
-- **Markers**: Toggle visibility of markers
-
-### Markers
-
-- **Types**:
-  - Dots
-  - Crosses
-  - Hearts
-  - Custom SVG
-- **Density**: Adjust marker density (1-50)
-- **Size**: Control marker size (1-50)
-- **Cross Thickness**: Adjust cross marker thickness (1-50)
-- **Stroke Width**: Control path stroke width (0.1-20)
-- **Stroke Join**: Choose between round, miter, or bevel joins
-- **Path Color**: Select from multiple colors
-- **Path Z-Index**: Toggle path position (front/back)
-- **Path Visibility**: Toggle path display
-- **Rotation**: Enable/disable marker rotation
-- **Gradient Fill**: Toggle gradient effects
-- **Gradient Inversion**: Invert gradient direction
-
-### Grid
-
-- **Size**: Adjust grid cell size (5-50)
-- **Pull**: Control grid attraction strength (0-100%)
-- **Visibility**: Toggle grid display
-- **Color**: Choose from multiple colors
-- **Stroke Width**: Adjust grid line thickness (0.1-2)
-- **Offset**: Toggle grid offset (centers markers in cells)
-
-### Animation
-
-- **Speed**: Control animation speed (0-100)
-- **Amplitude**: Adjust animation range (0-500)
-- **Types**:
-  - Wave
-  - Pulse
-  - Spiral
-  - Bounce
-  - Random
-- **Position**: Toggle position animation
-- **Grid Size**: Animate grid size
-- **Grid Pull**: Animate grid pull strength
-- **Color Offset**: Animate through color palette
-
-### Theme
-
-- **Color Mode**: Toggle color effects
-- **Palettes**:
-  - Neon
-  - Red
-  - Green
-  - Blue
-  - White
-  - Black
-  - Pastel
-  - Nature
-  - Mountains
-  - Beach
-  - Mondrian
-  - Sunset
-  - Ocean
-  - Forest
-  - Rainbow
-  - Fire
-  - Ice
-  - Pink
-  - Heart
-- **Color Count**: Adjust number of colors (2-200)
-- **Individual Colors**: Toggle per-marker coloring
-- **Ordered Colors**: Toggle ordered color cycling
-- **Dark Mode**: Toggle dark/light theme
-
-## Export Options
-
-- **SVG Export**: Export current design as SVG with timestamp
-- **Settings Log**: Export current settings as JSON with timestamp
+- **Live SVG Font Outlining**: Type two words and see them visualized with animated markers and morphing effects.
+- **Marker Types**: Choose from dots, crosses, hearts, squares, nibs, or upload a custom SVG marker.
+- **Marker Controls**: Adjust density, size, stroke, join, and color. Toggle markers and path display.
+- **Grid System**: Snap markers to a grid with adjustable size, pull, color (now with more color options: yellow, orange, purple, pink, gray, etc.), stroke, and offset.
+- **Animation**: Animate position, rotation, color, grid size, and grid pull. Choose animation type (wave, pulse, spiral, bounce, random). Amplitude sliders for POS, ROT, COLOR, and more.
+- **Color Palettes**: Many palettes (neon, pastel, rainbow, nature, fire, ice, etc.) for both markers and paths. Palette handling is robust and synchronized with the UI.
+- **Theme**: Light/dark mode toggle, color mode, palette selection, color count, individual/ordered color modes.
+- **Morphing**: Morph between two words, with global or per-letter morphing and adjustable speed.
+- **Export**: Download SVG or settings JSON with a single click.
+- **Randomization**: Press `R` to randomize most settings (except y-offset and show markers). Marker randomization never selects custom SVG. Color palette selection is robust.
+- **Fullscreen/Output-Only Mode**: Press `F` to hide all UI and make the SVG output fill the window. Press `F` again to restore the UI.
 
 ## Usage
 
-1. Enter text in the input fields
-2. Adjust settings in the control panels
-3. Use the animation controls to create dynamic effects
-4. Export your design as SVG or save settings
+1. Open `index.html` in your browser.
+2. Type two words in the input fields.
+3. Adjust controls in the Basics, Markers, Grid, Animation, and Theme sections.
+4. Use the randomization (`R`) and fullscreen (`F`) keyboard shortcuts for creative exploration.
+5. Export your SVG or settings as needed.
 
-## Technical Details
+## Keyboard Shortcuts
 
-### Morphing Modes
+- `R`: Randomize most settings (except y-offset and show markers; custom marker is never selected).
+- `F`: Toggle fullscreen/output-only mode.
 
-#### Normal Morph
+## Customization
 
-- Treats entire text as one shape
-- Creates smooth, fluid transitions
-- All points morph simultaneously
-- Best for abstract transitions
+- Add your own SVG font or marker by uploading via the UI.
+- Extend color palettes in `main.js` and the UI as desired.
 
-#### Individual Morph (i-morph)
+## Development
 
-- Morphs each letter independently
-- Maintains character boundaries
-- Includes stagger effect
-- Best for readable transitions
+- All logic is in `main.js` and `index.html`.
+- No build step required; just open in a browser.
 
-### Grid System
+---
 
-- Centered markers in grid cells
-- Adjustable cell size and pull strength
-- Optional offset for centered alignment
-- Customizable appearance
-
-### Color System
-
-- Multiple predefined palettes
-- Gradient support
-- Individual or grouped coloring
-- Animated color cycling
-
-## Browser Compatibility
-
-- Modern browsers with SVG support
-- Chrome, Firefox, Safari, Edge
-
-## License
-
-Free to use for personal and commercial projects.
+Enjoy exploring creative SVG typography!
