@@ -58,7 +58,7 @@
             box-sizing: border-box;
             outline: none;
             font-weight: normal;
-            text-transform: uppercase;
+            text-transform: none;
         }
 
         body.dark #textInput {
@@ -79,7 +79,7 @@
             box-sizing: border-box;
             outline: none;
             font-weight: normal;
-            text-transform: uppercase;
+            text-transform: none;
         }
 
         body.dark #textInput2 {
@@ -410,8 +410,8 @@
 
 <body>
     <div class="container">
-        <input type="text" id="textInput" placeholder="Type here..." value="SVG FONTS">
-        <input type="text" id="textInput2" placeholder="Type second word..." value="MORPH ME">
+        <input type="text" id="textInput" placeholder="Type here..." value="Chesa">
+        <input type="text" id="textInput2" placeholder="Type second word..." value="Marchetta">
 
         <div class="controls">
             <div class="control-section">
@@ -444,13 +444,6 @@
                     </label>
                 </div>
                 <div class="control-group">
-                    <label for="capsLock">Caps</label>
-                    <label class="switch">
-                        <input type="checkbox" id="capsLock" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="control-group">
                     <label for="showMarkers">Markers</label>
                     <label class="switch">
                         <input type="checkbox" id="showMarkers" checked>
@@ -460,14 +453,20 @@
                 <div class="control-group" style="display: flex; align-items: center; gap: 8px;">
                     <label style="flex: 0 0 50px;">Type</label>
                     <div style="display: flex; gap: 8px; align-items: center;">
-                        <label id="markerTypeDots" class="type-text active">Dots</label>
-                        <label id="markerTypeCrosses" class="type-text">Crosses</label>
-                        <label id="markerTypeHeart" class="type-text">Heart</label>
+                        <label id="markerTypeDots" class="type-text active">DOT</label>
+                        <label id="markerTypeCrosses" class="type-text">CRS</label>
+                        <label id="markerTypeHeart" class="type-text">HRT</label>
+                        <label id="markerTypeSquares" class="type-text">SQR</label>
+                        <label id="markerTypeNib" class="type-text">NIB</label>
                         <label for="customMarker" class="type-text">
                             <input type="file" id="customMarker" accept=".svg" style="display: none;">
                             Custom
                         </label>
                     </div>
+                </div>
+                <div class="control-group">
+                    <label for="nibAngle">N-Angle</label>
+                    <input type="range" id="nibAngle" min="0" max="180" step="1" value="45">
                 </div>
             </div>
 
@@ -475,7 +474,7 @@
                 <h3>Markers</h3>
                 <div class="control-group">
                     <label for="dotDensity">Density</label>
-                    <input type="range" id="dotDensity" min="1" max="50" step="0.1" value="45">
+                    <input type="range" id="dotDensity" min="1" max="50" step="0.1" value="48">
                 </div>
                 <div class="control-group">
                     <label for="dotSize">Size</label>
@@ -507,40 +506,62 @@
                         <option value="green">Green</option>
                     </select>
                 </div>
-                <div class="control-group">
-                    <label for="pathZIndex">P-Z</label>
-                    <label class="switch">
-                        <input type="checkbox" id="pathZIndex" checked>
-                        <span class="slider"></span>
-                    </label>
+                <div class="control-group" style="display: flex; align-items: center; gap: 8px;">
+                    <label style="flex: 0 0 50px;">Path</label>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <label for="pathZIndex" class="type-text">ZIND</label>
+                            <label class="switch">
+                                <input type="checkbox" id="pathZIndex" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <label for="showPath" class="type-text">Yes</label>
+                            <label class="switch">
+                                <input type="checkbox" id="showPath">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="control-group">
-                    <label for="showPath">Path</label>
-                    <label class="switch">
-                        <input type="checkbox" id="showPath">
-                        <span class="slider"></span>
-                    </label>
+                <div class="control-group" style="display: flex; align-items: center; gap: 8px;">
+                    <label style="flex: 0 0 50px;">Rotate</label>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <label for="rotate" class="type-text">Path</label>
+                            <label class="switch">
+                                <input type="checkbox" id="rotate">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <label for="rotate45" class="type-text">45°</label>
+                            <label class="switch">
+                                <input type="checkbox" id="rotate45">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="control-group">
-                    <label for="rotate">Rotate</label>
-                    <label class="switch">
-                        <input type="checkbox" id="rotate">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="control-group">
-                    <label for="gradientFill">Gradient</label>
-                    <label class="switch">
-                        <input type="checkbox" id="gradientFill">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="control-group">
-                    <label for="invertGradient">Invert</label>
-                    <label class="switch">
-                        <input type="checkbox" id="invertGradient">
-                        <span class="slider"></span>
-                    </label>
+                <div class="control-group" style="display: flex; align-items: center; gap: 8px;">
+                    <label style="flex: 0 0 50px;">Gradient</label>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <label for="gradientFill" class="type-text">Fill</label>
+                            <label class="switch">
+                                <input type="checkbox" id="gradientFill">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                            <label for="invertGradient" class="type-text">INV</label>
+                            <label class="switch">
+                                <input type="checkbox" id="invertGradient">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -595,8 +616,12 @@
                     <input type="range" id="animColorSpeed" min="0" max="100" step="1" value="0">
                 </div>
                 <div class="control-group">
-                    <label for="animAmp">Amp</label>
+                    <label for="animAmp">P-Amp</label>
                     <input type="range" id="animAmp" min="0" max="500" step="1" value="0">
+                </div>
+                <div class="control-group">
+                    <label for="animRotAmp">R-Amp</label>
+                    <input type="range" id="animRotAmp" min="0" max="500" step="1" value="0">
                 </div>
                 <div class="control-group">
                     <label for="animType">Type</label>
@@ -715,10 +740,10 @@
         const dotSizeSlider = document.getElementById('dotSize');
         const strokeWidthSlider = document.getElementById('strokeWidth');
         const showPathSwitch = document.getElementById('showPath');
-        const capsLockSwitch = document.getElementById('capsLock');
         const colorModeSwitch = document.getElementById('colorMode');
         const crossThicknessSlider = document.getElementById('crossThickness');
         const rotateSwitch = document.getElementById('rotate');
+        const rotate45Switch = document.getElementById('rotate45');
         const spacingSlider = document.getElementById('spacing');
         const darkModeSwitch = document.getElementById('darkMode');
         const gridSizeSlider = document.getElementById('gridSize');
@@ -726,6 +751,7 @@
         const animSpeedSlider = document.getElementById('animSpeed');
         const animColorSpeedSlider = document.getElementById('animColorSpeed');
         const animAmpSlider = document.getElementById('animAmp');
+        const animRotAmpSlider = document.getElementById('animRotAmp');
         const animTypeSelect = document.getElementById('animType');
         const animPosSwitch = document.getElementById('animPos');
         const animColorSwitch = document.getElementById('animColor');
@@ -750,6 +776,7 @@
         const gridStrokeSlider = document.getElementById('gridStroke');
         const gridOffsetSwitch = document.getElementById('gridOffset');
         const animColorOffsetSlider = document.getElementById('animColorOffset');
+        const nibAngleSlider = document.getElementById('nibAngle');
         let customMarkerSVG = null;
         let animationFrame = null;
         let startTime = null;
@@ -766,14 +793,15 @@
         dotSizeSlider.addEventListener('input', updateDisplay);
         strokeWidthSlider.addEventListener('input', updateDisplay);
         showPathSwitch.addEventListener('change', updateDisplay);
-        capsLockSwitch.addEventListener('change', updateDisplay);
         colorModeSwitch.addEventListener('change', () => {
             generateColors();
             updateDisplay();
         });
         crossThicknessSlider.addEventListener('input', updateDisplay);
         rotateSwitch.addEventListener('change', updateDisplay);
+        rotate45Switch.addEventListener('change', updateDisplay);
         spacingSlider.addEventListener('input', updateDisplay);
+        nibAngleSlider.addEventListener('input', updateDisplay);
         darkModeSwitch.addEventListener('change', () => {
             document.body.classList.toggle('dark');
         });
@@ -800,13 +828,19 @@
             }
         });
         animAmpSlider.addEventListener('input', updateDisplay);
+        animRotAmpSlider.addEventListener('input', updateDisplay);
         animTypeSelect.addEventListener('change', updateDisplay);
         animPosSwitch.addEventListener('change', updateDisplay);
         animColorSwitch.addEventListener('change', updateDisplay);
         animGridSizeSlider.addEventListener('input', updateDisplay);
         animGridPullSlider.addEventListener('change', updateDisplay);
         gradientFillSwitch.addEventListener('change', updateDisplay);
-        invertGradientSwitch.addEventListener('change', updateDisplay);
+        invertGradientSwitch.addEventListener('change', () => {
+            if (invertGradientSwitch.checked) {
+                gradientFillSwitch.checked = true;
+            }
+            updateDisplay();
+        });
         individualColorsSwitch.addEventListener('change', () => {
             generateColors();
             updateDisplay();
@@ -835,9 +869,6 @@
             }
         });
         textInput2.addEventListener('input', (e) => {
-            if (capsLockSwitch.checked) {
-                textInput2.value = textInput2.value.toUpperCase();
-            }
             generateColors();
             updateDisplay();
         });
@@ -856,11 +887,13 @@
         showMarkersSwitch.addEventListener('change', updateDisplay);
         strokeJoinSelect.addEventListener('change', updateDisplay);
 
-        // Handle text input with caps lock
+        // Handle text input
         textInput.addEventListener('input', (e) => {
-            if (capsLockSwitch.checked) {
-                textInput.value = textInput.value.toUpperCase();
-            }
+            generateColors();
+            updateDisplay();
+        });
+
+        textInput2.addEventListener('input', (e) => {
             generateColors();
             updateDisplay();
         });
@@ -932,7 +965,7 @@
                 Array.from(textInput.value).forEach(char => {
                     if (fontData[char]) {
                         if (individualColorsSwitch.checked) {
-                            const points = getPointsAlongPath(fontData[char].path, parseFloat(dotDensitySlider.value));
+                            const points = getPointsAlongPaths(fontData[char].paths, parseFloat(dotDensitySlider.value));
                             charColors[char] = {};
                             const palette = COLOR_PALETTES[colorPaletteSelect.value];
                             const colorCount = parseInt(colorCountSlider.value);
@@ -981,8 +1014,11 @@
                         const width = parseFloat(glyph.getAttribute('horiz-adv-x') || '1000');
 
                         if (path) {
+                            // Split the path data into individual paths
+                            const paths = path.split(/(?=M)/).filter(p => p.trim());
+                            
                             fontData[char] = {
-                                path: path,
+                                paths: paths,
                                 width: width
                             };
                         }
@@ -996,28 +1032,40 @@
                 console.error('Error loading SVG font:', error);
             });
 
-        function getPointsAlongPath(path, spacing) {
-            if (!path) return [];
+        function getPointsAlongPaths(paths, spacing) {
+            if (!paths || paths.length === 0) return [];
 
-            const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            pathElement.setAttribute('d', path);
-            const length = pathElement.getTotalLength();
+            const allPoints = [];
+            
+            paths.forEach(path => {
+                const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                pathElement.setAttribute('d', path);
+                const length = pathElement.getTotalLength();
 
-            // Invert and scale the spacing value for wider range
-            const adjustedSpacing = (51 - spacing) * 20; // Convert from 0.1-50 to 1000-20
-            const numPoints = Math.ceil(length / adjustedSpacing);
-            const points = [];
+                // Invert and scale the spacing value for wider range
+                const adjustedSpacing = (51 - spacing) * 20; // Convert from 0.1-50 to 1000-20
+                const numPoints = Math.ceil(length / adjustedSpacing);
+                const points = [];
 
-            // Calculate the exact step size for even distribution
-            const step = length / (numPoints - 1);
+                // Always add the start point
+                points.push(pathElement.getPointAtLength(0));
 
-            // Get points at regular intervals
-            for (let i = 0; i < numPoints; i++) {
-                const point = pathElement.getPointAtLength(i * step);
-                points.push(point);
-            }
+                // Calculate the exact step size for even distribution between start and end
+                const step = length / (numPoints - 1);
 
-            return points;
+                // Get points at regular intervals (excluding start and end)
+                for (let i = 1; i < numPoints - 1; i++) {
+                    const point = pathElement.getPointAtLength(i * step);
+                    points.push(point);
+                }
+
+                // Always add the end point
+                points.push(pathElement.getPointAtLength(length));
+
+                allPoints.push(...points);
+            });
+
+            return allPoints;
         }
 
         const colorPaletteSelect = document.getElementById('colorPalette');
@@ -1186,8 +1234,164 @@
             ],
         };
 
+        function getAnimationOffset(x, y, time, speed, amplitude, type) {
+            if (speed === 0 || amplitude === 0) return { x: 0, y: 0 };
+
+            const normalizedSpeed = speed / 10;
+            const normalizedAmp = amplitude / 20; // Adjusted for larger amplitude range
+
+            switch (type) {
+                case 'wave':
+                    // Wave animation with position-based phase offset
+                    const phaseX = x * 0.02;
+                    const phaseY = y * 0.02;
+                    return {
+                        x: Math.sin(time * normalizedSpeed + phaseX) * normalizedAmp,
+                        y: Math.cos(time * normalizedSpeed + phaseY) * normalizedAmp
+                    };
+
+                case 'pulse':
+                    // Pulse animation with position-based phase offset
+                    const phase = (x + y) * 0.01;
+                    const pulse = Math.sin(time * normalizedSpeed + phase) * normalizedAmp;
+                    return {
+                        x: pulse,
+                        y: pulse
+                    };
+
+                case 'spiral':
+                    // Spiral animation
+                    const angle = time * normalizedSpeed + (x + y) * 0.01;
+                    const radius = normalizedAmp * (1 + Math.sin(time * normalizedSpeed * 0.5) * 0.5);
+                    return {
+                        x: Math.cos(angle) * radius,
+                        y: Math.sin(angle) * radius
+                    };
+
+                case 'bounce':
+                    // Bounce animation
+                    const bounceX = Math.abs(Math.sin(time * normalizedSpeed + x * 0.01)) * normalizedAmp;
+                    const bounceY = Math.abs(Math.sin(time * normalizedSpeed * 1.2 + y * 0.01)) * normalizedAmp;
+                    return {
+                        x: bounceX,
+                        y: bounceY
+                    };
+
+                case 'random':
+                    // Random but smooth movement
+                    const randomX = Math.sin(time * normalizedSpeed + x * 0.01) *
+                        Math.cos(time * normalizedSpeed * 0.7 + y * 0.01) * normalizedAmp;
+                    const randomY = Math.cos(time * normalizedSpeed + y * 0.01) *
+                        Math.sin(time * normalizedSpeed * 0.7 + x * 0.01) * normalizedAmp;
+                    return {
+                        x: randomX,
+                        y: randomY
+                    };
+
+                default:
+                    return { x: 0, y: 0 };
+            }
+        }
+
+        function getAnimationRotation(time, speed, amplitude, type, x, y) {
+            if (speed === 0 || amplitude === 0) return 0;
+            
+            const normalizedSpeed = speed / 30; // Reduced from 10 to 30 for slower rotation
+            const normalizedAmp = amplitude / 20;
+
+            switch (type) {
+                case 'wave':
+                    return Math.sin(time * normalizedSpeed + (x + y) * 0.01) * normalizedAmp * 30;
+                case 'pulse':
+                    return Math.sin(time * normalizedSpeed + (x + y) * 0.01) * normalizedAmp * 30;
+                case 'spiral':
+                    return time * normalizedSpeed * 180 + (x + y) * 0.01;
+                case 'bounce':
+                    return Math.abs(Math.sin(time * normalizedSpeed + (x + y) * 0.01)) * normalizedAmp * 30;
+                case 'random':
+                    return Math.sin(time * normalizedSpeed + x * 0.01) * 
+                           Math.cos(time * normalizedSpeed * 0.7 + y * 0.01) * normalizedAmp * 30;
+                default:
+                    return 0;
+            }
+        }
+
         function createMarker(x, y, size, isCross, color, crossThickness, rotate, pathAngle) {
-            if (markerType === 3 && customMarkerSVG) {
+            if (markerType === 5) {
+                // Create nib marker
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                let transform = '';
+                if (rotate) {
+                    const time = startTime ? (performance.now() - startTime) / 1000 : 0;
+                    const animSpeed = parseFloat(animSpeedSlider.value);
+                    const animRotAmp = parseFloat(animRotAmpSlider.value);
+                    const animationType = animTypeSelect.value;
+                    const animRotation = getAnimationRotation(time, animSpeed, animRotAmp, animationType, x, y);
+                    transform += `rotate(${(pathAngle || 0) + animRotation},${x},${y})`;
+                }
+                if (rotate45Switch.checked) {
+                    transform += ` rotate(45,${x},${y})`;
+                }
+                if (transform) {
+                    group.setAttribute('transform', transform);
+                }
+
+                // Create nib rectangle
+                const nib = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                const nibWidth = size * 4; // Make nib wider than tall
+                const nibHeight = size * 0.5; // Make nib thin
+                nib.setAttribute('x', x - nibWidth/2);
+                nib.setAttribute('y', y - nibHeight/2);
+                nib.setAttribute('width', nibWidth);
+                nib.setAttribute('height', nibHeight);
+                nib.setAttribute('rx', size * 0.2); // Slightly rounded corners
+                nib.setAttribute('ry', size * 0.2);
+
+                // Apply base rotation for nib angle
+                const nibAngle = parseFloat(nibAngleSlider.value);
+                nib.setAttribute('transform', `rotate(${nibAngle},${x},${y})`);
+
+                if (gradientFillSwitch.checked) {
+                    // Create a unique ID for the gradient
+                    const gradientId = `gradient-${x}-${y}-nib`;
+
+                    // Create the gradient definition
+                    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
+                    gradient.setAttribute('id', gradientId);
+                    gradient.setAttribute('cx', '50%');
+                    gradient.setAttribute('cy', '50%');
+                    gradient.setAttribute('r', '50%');
+                    gradient.setAttribute('fx', '50%');
+                    gradient.setAttribute('fy', '50%');
+
+                    // Add gradient stops
+                    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop1.setAttribute('offset', '0%');
+                    stop1.setAttribute('stop-color', color);
+                    stop1.setAttribute('stop-opacity', invertGradientSwitch.checked ? '0.3' : '1');
+
+                    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop2.setAttribute('offset', '100%');
+                    stop2.setAttribute('stop-color', color);
+                    stop2.setAttribute('stop-opacity', invertGradientSwitch.checked ? '1' : '0.3');
+
+                    gradient.appendChild(stop1);
+                    gradient.appendChild(stop2);
+
+                    // Add gradient to defs
+                    const defs = svgContainer.querySelector('svg defs');
+                    defs.appendChild(gradient);
+
+                    // Apply gradient to nib
+                    nib.setAttribute('fill', `url(#${gradientId})`);
+                } else {
+                    nib.setAttribute('fill', color);
+                }
+
+                group.appendChild(nib);
+                return group;
+            } else if (markerType === 3 && customMarkerSVG) {
                 const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
                 // Get the viewBox of the original SVG
@@ -1287,7 +1491,19 @@
                 newSvg.setAttribute('transform-origin', 'center');
 
                 // Set the transform on the group to position and scale, accounting for the center point
-                group.setAttribute('transform', `translate(${x - centerX * scale},${y - centerY * scale}) scale(${scale})`);
+                let transform = `translate(${x - centerX * scale},${y - centerY * scale}) scale(${scale})`;
+                if (rotate) {
+                    const time = startTime ? (performance.now() - startTime) / 1000 : 0;
+                    const animSpeed = parseFloat(animSpeedSlider.value);
+                    const animRotAmp = parseFloat(animRotAmpSlider.value);
+                    const animationType = animTypeSelect.value;
+                    const animRotation = getAnimationRotation(time, animSpeed, animRotAmp, animationType, x, y);
+                    transform += ` rotate(${(pathAngle || 0) + animRotation},${x},${y})`;
+                }
+                if (rotate45Switch.checked) {
+                    transform += ` rotate(45,${x},${y})`;
+                }
+                group.setAttribute('transform', transform);
                 group.appendChild(newSvg);
 
                 return group;
@@ -1313,6 +1529,22 @@
                     ${x + 5 * scale},${y - 10 * scale} 
                     ${x},${y - 5 * scale} 
                     Z`);
+
+                let transform = '';
+                if (rotate) {
+                    const time = startTime ? (performance.now() - startTime) / 1000 : 0;
+                    const animSpeed = parseFloat(animSpeedSlider.value);
+                    const animRotAmp = parseFloat(animRotAmpSlider.value);
+                    const animationType = animTypeSelect.value;
+                    const animRotation = getAnimationRotation(time, animSpeed, animRotAmp, animationType, x, y);
+                    transform += `rotate(${(pathAngle || 0) + animRotation},${x},${y})`;
+                }
+                if (rotate45Switch.checked) {
+                    transform += ` rotate(45,${x},${y})`;
+                }
+                if (transform) {
+                    group.setAttribute('transform', transform);
+                }
                 
                 if (gradientFillSwitch.checked) {
                     // Create a unique ID for the gradient
@@ -1356,11 +1588,20 @@
             } else if (markerType === 1) {
                 const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
-                let rotation = 0;
-                if (rotate) rotation = 45; // Default to 45° when rotate is true
-
-                if (rotation !== 0) {
-                    group.setAttribute('transform', `rotate(${rotation},${x},${y})`);
+                let transform = '';
+                if (rotate) {
+                    const time = startTime ? (performance.now() - startTime) / 1000 : 0;
+                    const animSpeed = parseFloat(animSpeedSlider.value);
+                    const animRotAmp = parseFloat(animRotAmpSlider.value);
+                    const animationType = animTypeSelect.value;
+                    const animRotation = getAnimationRotation(time, animSpeed, animRotAmp, animationType, x, y);
+                    transform += `rotate(${(pathAngle || 0) + animRotation},${x},${y})`;
+                }
+                if (rotate45Switch.checked) {
+                    transform += ` rotate(45,${x},${y})`;
+                }
+                if (transform) {
+                    group.setAttribute('transform', transform);
                 }
 
                 // Create horizontal line
@@ -1384,11 +1625,96 @@
                 group.appendChild(line1);
                 group.appendChild(line2);
                 return group;
+            } else if (markerType === 4) {
+                // Create square marker
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                let transform = '';
+                if (rotate) {
+                    const time = startTime ? (performance.now() - startTime) / 1000 : 0;
+                    const animSpeed = parseFloat(animSpeedSlider.value);
+                    const animRotAmp = parseFloat(animRotAmpSlider.value);
+                    const animationType = animTypeSelect.value;
+                    const animRotation = getAnimationRotation(time, animSpeed, animRotAmp, animationType, x, y);
+                    transform += `rotate(${(pathAngle || 0) + animRotation},${x},${y})`;
+                }
+                if (rotate45Switch.checked) {
+                    transform += ` rotate(45,${x},${y})`;
+                }
+                if (transform) {
+                    group.setAttribute('transform', transform);
+                }
+
+                const square = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                const squareSize = size * 2; // Make squares slightly larger than dots
+                square.setAttribute('x', x - squareSize/2);
+                square.setAttribute('y', y - squareSize/2);
+                square.setAttribute('width', squareSize);
+                square.setAttribute('height', squareSize);
+
+                if (gradientFillSwitch.checked) {
+                    // Create a unique ID for the gradient
+                    const gradientId = `gradient-${x}-${y}-square`;
+
+                    // Create the gradient definition
+                    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
+                    gradient.setAttribute('id', gradientId);
+                    gradient.setAttribute('cx', '50%');
+                    gradient.setAttribute('cy', '50%');
+                    gradient.setAttribute('r', '50%');
+                    gradient.setAttribute('fx', '50%');
+                    gradient.setAttribute('fy', '50%');
+
+                    // Add gradient stops
+                    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop1.setAttribute('offset', '0%');
+                    stop1.setAttribute('stop-color', color);
+                    stop1.setAttribute('stop-opacity', invertGradientSwitch.checked ? '0.3' : '1');
+
+                    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+                    stop2.setAttribute('offset', '100%');
+                    stop2.setAttribute('stop-color', color);
+                    stop2.setAttribute('stop-opacity', invertGradientSwitch.checked ? '1' : '0.3');
+
+                    gradient.appendChild(stop1);
+                    gradient.appendChild(stop2);
+
+                    // Add gradient to defs
+                    const defs = svgContainer.querySelector('svg defs');
+                    defs.appendChild(gradient);
+
+                    // Apply gradient to square
+                    square.setAttribute('fill', `url(#${gradientId})`);
+                } else {
+                    square.setAttribute('fill', color);
+                }
+
+                group.appendChild(square);
+                return group;
             } else {
                 const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 circle.setAttribute('cx', x);
                 circle.setAttribute('cy', y);
                 circle.setAttribute('r', size);
+
+                if (rotate || rotate45Switch.checked) {
+                    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    let transform = '';
+                    if (rotate) {
+                        const time = startTime ? (performance.now() - startTime) / 1000 : 0;
+                        const animSpeed = parseFloat(animSpeedSlider.value);
+                        const animRotAmp = parseFloat(animRotAmpSlider.value);
+                        const animationType = animTypeSelect.value;
+                        const animRotation = getAnimationRotation(time, animSpeed, animRotAmp, animationType, x, y);
+                        transform += `rotate(${(pathAngle || 0) + animRotation},${x},${y})`;
+                    }
+                    if (rotate45Switch.checked) {
+                        transform += ` rotate(45,${x},${y})`;
+                    }
+                    group.setAttribute('transform', transform);
+                    group.appendChild(circle);
+                    return group;
+                }
 
                 if (gradientFillSwitch.checked) {
                     // Create a unique ID for the gradient
@@ -1432,18 +1758,28 @@
         }
 
         // Update the marker type state and event listeners
-        let markerType = 0; // 0 = dots, 1 = crosses, 2 = heart, 3 = custom SVG
+        let markerType = 0; // 0 = dots, 1 = crosses, 2 = heart, 3 = custom SVG, 4 = squares, 5 = nib
         const markerTypeDots = document.getElementById('markerTypeDots');
         const markerTypeCrosses = document.getElementById('markerTypeCrosses');
         const markerTypeHeart = document.getElementById('markerTypeHeart');
+        const markerTypeSquares = document.getElementById('markerTypeSquares');
+        const markerTypeNib = document.getElementById('markerTypeNib');
         const markerTypeCustom = document.querySelector('label[for="customMarker"]');
 
         function updateMarkerTypeUI() {
             markerTypeDots.classList.toggle('active', markerType === 0);
             markerTypeCrosses.classList.toggle('active', markerType === 1);
             markerTypeHeart.classList.toggle('active', markerType === 2);
+            markerTypeSquares.classList.toggle('active', markerType === 4);
+            markerTypeNib.classList.toggle('active', markerType === 5);
             markerTypeCustom.classList.toggle('active', markerType === 3);
         }
+
+        markerTypeNib.addEventListener('click', () => {
+            markerType = 5;
+            updateMarkerTypeUI();
+            updateDisplay();
+        });
 
         markerTypeDots.addEventListener('click', () => {
             markerType = 0;
@@ -1459,6 +1795,12 @@
 
         markerTypeHeart.addEventListener('click', () => {
             markerType = 2;
+            updateMarkerTypeUI();
+            updateDisplay();
+        });
+
+        markerTypeSquares.addEventListener('click', () => {
+            markerType = 4;
             updateMarkerTypeUI();
             updateDisplay();
         });
@@ -1526,71 +1868,6 @@
             animationFrame = requestAnimationFrame(animate);
         }
 
-        function getAnimationOffset(x, y, time, speed, amplitude, type) {
-            if (speed === 0 || amplitude === 0) return { x: 0, y: 0 };
-
-            const normalizedSpeed = speed / 10;
-            const normalizedAmp = amplitude / 20; // Adjusted for larger amplitude range
-
-            switch (type) {
-                case 'wave':
-                    // Wave animation with position-based phase offset
-                    const phaseX = x * 0.02;
-                    const phaseY = y * 0.02;
-                    return {
-                        x: Math.sin(time * normalizedSpeed + phaseX) * normalizedAmp,
-                        y: Math.cos(time * normalizedSpeed + phaseY) * normalizedAmp
-                    };
-
-                case 'pulse':
-                    // Pulse animation with position-based phase offset
-                    const phase = (x + y) * 0.01;
-                    const pulse = Math.sin(time * normalizedSpeed + phase) * normalizedAmp;
-                    return {
-                        x: pulse,
-                        y: pulse
-                    };
-
-                case 'spiral':
-                    // Spiral animation
-                    const angle = time * normalizedSpeed + (x + y) * 0.01;
-                    const radius = normalizedAmp * (1 + Math.sin(time * normalizedSpeed * 0.5) * 0.5);
-                    return {
-                        x: Math.cos(angle) * radius,
-                        y: Math.sin(angle) * radius
-                    };
-
-                case 'bounce':
-                    // Bounce animation
-                    const bounceX = Math.abs(Math.sin(time * normalizedSpeed + x * 0.01)) * normalizedAmp;
-                    const bounceY = Math.abs(Math.sin(time * normalizedSpeed * 1.2 + y * 0.01)) * normalizedAmp;
-                    return {
-                        x: bounceX,
-                        y: bounceY
-                    };
-
-                case 'random':
-                    // Random but smooth movement
-                    const randomX = Math.sin(time * normalizedSpeed + x * 0.01) *
-                        Math.cos(time * normalizedSpeed * 0.7 + y * 0.01) * normalizedAmp;
-                    const randomY = Math.cos(time * normalizedSpeed + y * 0.01) *
-                        Math.sin(time * normalizedSpeed * 0.7 + x * 0.01) * normalizedAmp;
-                    return {
-                        x: randomX,
-                        y: randomY
-                    };
-
-                default:
-                    return { x: 0, y: 0 };
-            }
-        }
-
-        function getAnimationRotation(time, speed) {
-            if (speed === 0) return 0;
-            const normalizedSpeed = speed / 10;
-            return Math.sin(time * normalizedSpeed) * 30; // Rotate up to 30 degrees
-        }
-
         function updateDisplay() {
             if (Object.keys(fontData).length === 0) return;
 
@@ -1650,6 +1927,7 @@
             let gridPull = parseFloat(gridPullSlider.value);
             const animSpeed = parseFloat(animSpeedSlider.value);
             const animAmp = parseFloat(animAmpSlider.value);
+            const animRotAmp = parseFloat(animRotAmpSlider.value);
             const animationType = animTypeSelect.value;
             const animPos = animPosSwitch.checked;
             const animGridSize = animGridSizeSlider.value > 0;
@@ -1672,7 +1950,7 @@
                         currentX1 += 200 * scale * parseFloat(spacingSlider.value);
                     } else if (fontData[char]) {
                         const charWidth = fontData[char].width * scale * parseFloat(spacingSlider.value);
-                        const charPoints = getPointsAlongPath(fontData[char].path, dotSpacing);
+                        const charPoints = getPointsAlongPaths(fontData[char].paths, dotSpacing);
                         currentPoints1.push({
                             points: charPoints.map(p => ({
                                 x: currentX1 + p.x * scale,
@@ -1692,7 +1970,7 @@
                         currentX2 += 200 * scale * parseFloat(spacingSlider.value);
                     } else if (fontData[char]) {
                         const charWidth = fontData[char].width * scale * parseFloat(spacingSlider.value);
-                        const charPoints = getPointsAlongPath(fontData[char].path, dotSpacing);
+                        const charPoints = getPointsAlongPaths(fontData[char].paths, dotSpacing);
                         currentPoints2.push({
                             points: charPoints.map(p => ({
                                 x: currentX2 + p.x * scale,
@@ -1763,7 +2041,7 @@
                         x1 += 200 * scale * parseFloat(spacingSlider.value);
                     } else if (fontData[char]) {
                         const charWidth = fontData[char].width * scale * parseFloat(spacingSlider.value);
-                        const charPoints = getPointsAlongPath(fontData[char].path, dotSpacing);
+                        const charPoints = getPointsAlongPaths(fontData[char].paths, dotSpacing);
                         charPoints.forEach((point, pointIndex) => {
                             points1.push({
                                 x: x1 + point.x * scale,
@@ -1782,7 +2060,7 @@
                         x2 += 200 * scale * parseFloat(spacingSlider.value);
                     } else if (fontData[char]) {
                         const charWidth = fontData[char].width * scale * parseFloat(spacingSlider.value);
-                        const charPoints = getPointsAlongPath(fontData[char].path, dotSpacing);
+                        const charPoints = getPointsAlongPaths(fontData[char].paths, dotSpacing);
                         charPoints.forEach(point => {
                             points2.push({
                                 x: x2 + point.x * scale,
@@ -1883,6 +2161,7 @@
                 let pathData = '';
                 let currentLetterPoints = [];
                 let currentLetter = null;
+                let currentPathIndex = 0;
 
                 morphedPoints.forEach((point, index) => {
                     let x = point.x;
@@ -1913,10 +2192,20 @@
                         // Start new letter
                         currentLetter = point.char;
                         currentLetterPoints = [];
+                        currentPathIndex = 0;
                     }
 
                     // Add point to current letter's points
                     currentLetterPoints.push({ x, y });
+
+                    // If this is the last point of a path within a letter, add a move command
+                    if (point.pathIndex !== undefined && point.pathIndex !== currentPathIndex) {
+                        pathData += currentLetterPoints.map((p, i) => 
+                            `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`
+                        ).join('');
+                        currentLetterPoints = [];
+                        currentPathIndex = point.pathIndex;
+                    }
                 });
 
                 // Add the last letter's points
@@ -2052,7 +2341,6 @@
                     fontSize: fontSizeSlider.value,
                     spacing: spacingSlider.value,
                     yOffset: yOffsetSlider.value,
-                    capsLock: capsLockSwitch.checked,
                 },
                 markers: {
                     density: dotDensitySlider.value,
@@ -2095,7 +2383,10 @@
                     amount: morphAmountSlider.value,
                     individual: individualMorphSwitch.checked,
                     speed: morphSpeedSlider.value,
-                }
+                },
+                nib: {
+                    angle: nibAngleSlider.value,
+                },
             };
             return JSON.stringify(settings, null, 2);
         }
