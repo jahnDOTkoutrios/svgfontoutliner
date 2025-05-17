@@ -155,7 +155,6 @@ let morphStartTime = null;
 let morphDirection = 1;
 
 const exportStaticBtn = document.getElementById("exportStatic");
-const exportSettingsBtn = document.getElementById("exportSettings");
 
 // Update display on input changes
 fontSizeSlider.addEventListener("input", updateDisplay);
@@ -1074,32 +1073,7 @@ function createMarker(
     circle.setAttribute("cy", y);
     circle.setAttribute("r", size);
 
-    if (rotate || rotate45Switch.checked) {
-      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      let transform = "";
-      if (rotate) {
-        const time = startTime ? (performance.now() - startTime) / 1000 : 0;
-        const animSpeed = parseFloat(animSpeedSlider.value);
-        const animRotAmp = parseFloat(animRotAmpSlider.value);
-        const animationType = animTypeSelect.value;
-        const animRotation = getAnimationRotation(
-          time,
-          animSpeed,
-          animRotAmp,
-          animationType,
-          x,
-          y
-        );
-        transform += `rotate(${(pathAngle || 0) + animRotation},${x},${y})`;
-      }
-      if (rotate45Switch.checked) {
-        transform += ` rotate(45,${x},${y})`;
-      }
-      group.setAttribute("transform", transform);
-      group.appendChild(circle);
-      return group;
-    }
-
+    // Apply color or gradient before any rotation
     if (gradientFillSwitch.checked) {
       // Create a unique ID for the gradient
       const gradientId = `gradient-${x}-${y}`;
@@ -1150,6 +1124,32 @@ function createMarker(
       circle.setAttribute("fill", `url(#${gradientId})`);
     } else {
       circle.setAttribute("fill", color);
+    }
+
+    if (rotate || rotate45Switch.checked) {
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      let transform = "";
+      if (rotate) {
+        const time = startTime ? (performance.now() - startTime) / 1000 : 0;
+        const animSpeed = parseFloat(animSpeedSlider.value);
+        const animRotAmp = parseFloat(animRotAmpSlider.value);
+        const animationType = animTypeSelect.value;
+        const animRotation = getAnimationRotation(
+          time,
+          animSpeed,
+          animRotAmp,
+          animationType,
+          x,
+          y
+        );
+        transform += `rotate(${(pathAngle || 0) + animRotation},${x},${y})`;
+      }
+      if (rotate45Switch.checked) {
+        transform += ` rotate(45,${x},${y})`;
+      }
+      group.setAttribute("transform", transform);
+      group.appendChild(circle);
+      return group;
     }
 
     return circle;
@@ -1262,10 +1262,12 @@ function animate() {
   const time = (performance.now() - startTime) / 1000;
   const speed = parseFloat(animSpeedSlider.value) / 50;
   const colorAmp = parseFloat(animColorAmpSlider.value) / 20;
-  if (colorAmp > 0) {
-    const colorOffset = (time * speed * colorAmp) % 1;
+
+  // Always regenerate colors if color mode is on and we have animation
+  if (colorModeSwitch.checked && (colorAmp > 0 || speed > 0)) {
     generateColors();
   }
+
   updateDisplay();
   animationFrame = requestAnimationFrame(animate);
 }
@@ -1322,7 +1324,9 @@ function updateDisplay() {
   // Calculate center positions for both words
   const centerX1 = 600 - totalWidth1 / 2;
   const centerX2 = 600 - totalWidth2 / 2;
-  const y = 300 + parseFloat(yOffsetSlider.value); // Add Y-offset to center Y position
+  const y = document.body.classList.contains("fullscreen-output")
+    ? 400 + parseFloat(yOffsetSlider.value)
+    : 300 + parseFloat(yOffsetSlider.value); // Adjust Y position for fullscreen
   const fontSize = parseFloat(fontSizeSlider.value);
   const scale = fontSize / 1000;
   const dotSpacing = parseFloat(dotDensitySlider.value);
@@ -1572,10 +1576,49 @@ function updateDisplay() {
       // Calculate path angle for rotation if needed
       let pathAngle = 0;
       if (rotate) {
-        const nextPoint = morphedPoints[(index + 1) % morphedPoints.length];
-        const dx = nextPoint.x - point.x;
-        const dy = nextPoint.y - point.y;
-        pathAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+        // Find the start and end of the current path within the letter
+        let pathStart = index;
+        let pathEnd = index;
+
+        // Find the start of this path
+        while (
+          pathStart > 0 &&
+          morphedPoints[pathStart].char === morphedPoints[pathStart - 1].char &&
+          morphedPoints[pathStart].pathIndex ===
+            morphedPoints[pathStart - 1].pathIndex
+        ) {
+          pathStart--;
+        }
+
+        // Find the end of this path
+        while (
+          pathEnd < morphedPoints.length - 1 &&
+          morphedPoints[pathEnd].char === morphedPoints[pathEnd + 1].char &&
+          morphedPoints[pathEnd].pathIndex ===
+            morphedPoints[pathEnd + 1].pathIndex
+        ) {
+          pathEnd++;
+        }
+
+        if (index === pathStart) {
+          // First point of path - use next point
+          const nextPoint = morphedPoints[index + 1];
+          const dx = nextPoint.x - point.x;
+          const dy = nextPoint.y - point.y;
+          pathAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+        } else if (index === pathEnd) {
+          // Last point of path - use previous point
+          const prevPoint = morphedPoints[index - 1];
+          const dx = point.x - prevPoint.x;
+          const dy = point.y - prevPoint.y;
+          pathAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+        } else {
+          // Middle point - use next point
+          const nextPoint = morphedPoints[index + 1];
+          const dx = nextPoint.x - point.x;
+          const dy = nextPoint.y - point.y;
+          pathAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+        }
       }
 
       // Apply grid snapping if pull strength > 0
@@ -1856,88 +1899,12 @@ function getCurrentSVG() {
   return exportSvg ? exportSvg.outerHTML : "";
 }
 
-function getCurrentSettings() {
-  const settings = {
-    text: {
-      firstWord: textInput.value,
-      secondWord: textInput2.value,
-      fontSize: fontSizeSlider.value,
-      spacing: spacingSlider.value,
-      yOffset: yOffsetSlider.value,
-    },
-    markers: {
-      density: dotDensitySlider.value,
-      size: dotSizeSlider.value,
-      crossThickness: crossThicknessSlider.value,
-      strokeWidth: strokeWidthSlider.value,
-      strokeJoin: strokeJoinSelect.value,
-      pathColor: pathColorSelect.value,
-      pathZIndex: pathZIndexSwitch.checked,
-      showPath: showPathSwitch.checked,
-      showMarkers: showMarkersSwitch.checked,
-      markerType: markerType,
-    },
-    grid: {
-      size: gridSizeSlider.value,
-      pull: gridPullSlider.value,
-      show: showGridSwitch.checked,
-      color: gridColorSelect.value,
-      stroke: gridStrokeSlider.value,
-      offset: gridOffsetSwitch.checked,
-    },
-    animation: {
-      speed: animSpeedSlider.value,
-      amplitude: animAmpSlider.value,
-      rotationAmplitude: animRotAmpSlider.value,
-      colorAmplitude: animColorAmpSlider.value,
-      type: animTypeSelect.value,
-      gridSize: animGridSizeSlider.value,
-      gridPull: animGridPullSlider.value,
-    },
-    theme: {
-      colorMode: colorModeSwitch.checked,
-      palette: colorPaletteSelect.value,
-      colorCount: colorCountSlider.value,
-      individualColors: individualColorsSwitch.checked,
-      orderedColors: orderedColorsSwitch.checked,
-      darkMode: darkModeSwitch.checked,
-    },
-    morph: {
-      amount: morphAmountSlider.value,
-      individual: individualMorphSwitch.checked,
-      speed: morphSpeedSlider.value,
-    },
-    nib: {
-      angle: nibAngleSlider.value,
-    },
-  };
-  return JSON.stringify(settings, null, 2);
-}
-
-function downloadSettings(settingsString, filename) {
-  const blob = new Blob([settingsString], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
 exportStaticBtn.addEventListener("click", () => {
   const svgString = getCurrentSVG();
   if (svgString) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     downloadSVG(svgString, `svg-export-${timestamp}.svg`);
   }
-});
-
-exportSettingsBtn.addEventListener("click", () => {
-  const settingsString = getCurrentSettings();
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  downloadSettings(settingsString, `settings-${timestamp}.json`);
 });
 
 // Update colors when density changes

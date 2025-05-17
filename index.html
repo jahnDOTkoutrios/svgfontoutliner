@@ -29,6 +29,11 @@
             display: flex;
             flex-direction: column;
             text-transform: uppercase;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            overflow: hidden;
         }
 
         body.dark {
@@ -45,7 +50,7 @@
             flex-direction: column;
         }
 
-        #textInput {
+        #textInput, #textInput2 {
             width: 100%;
             padding: 12px;
             font-size: 12px;
@@ -59,30 +64,13 @@
             outline: none;
             font-weight: normal;
             text-transform: none;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
         }
 
-        body.dark #textInput {
-            background-color: #2a2a2a;
-            color: #fff;
-        }
-
-        #textInput2 {
-            width: 100%;
-            padding: 12px;
-            font-size: 12px;
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 6px;
-            background-color: white;
-            font-family: 'G2ErikaMono', monospace;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-            outline: none;
-            font-weight: normal;
-            text-transform: none;
-        }
-
-        body.dark #textInput2 {
+        body.dark #textInput, body.dark #textInput2 {
             background-color: #2a2a2a;
             color: #fff;
         }
@@ -94,7 +82,7 @@
             border-radius: 6px;
             padding: 10px;
             margin-bottom: 10px;
-            background-color: white;
+            background-color: #f8f9fa;
             transition: all 0.3s ease;
             box-sizing: border-box;
             display: flex;
@@ -103,7 +91,7 @@
         }
 
         body.dark #svgContainer {
-            background-color: #2a2a2a;
+            background-color: #1a1a1a;
         }
 
         .controls {
@@ -418,11 +406,21 @@
             margin: 0 !important;
             padding: 0 !important;
             border-radius: 0 !important;
-            background: white;
+            background: #f8f9fa;
             z-index: 1000;
         }
+        .fullscreen-output #svgContainer svg {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            padding: 5vh 5vw !important;
+            box-sizing: border-box !important;
+            display: block !important;
+            margin: auto !important;
+            transform-origin: center !important;
+        }
         body.dark.fullscreen-output #svgContainer {
-            background: #2a2a2a;
+            background: #1a1a1a;
         }
     </style>
 </head>
@@ -725,14 +723,29 @@
                     </label>
                 </div>
             </div>
+
+            <div class="control-section">
+                <h3>Presets</h3>
+                <div class="control-group" style="display: flex; gap: 8px; max-width: 300px;">
+                    <button id="savePreset" class="type-btn" style="flex: 1;">SAVE PRESET</button>
+                    <button id="loadPreset" class="type-btn" style="flex: 1;">LOAD PRESET</button>
+                    <input type="file" id="presetFile" accept=".json" style="display: none;">
+                </div>
+                <div class="control-group" style="display: flex; gap: 8px; max-width: 300px;">
+                    <button id="preset1" class="type-btn" style="flex: 1;">1</button>
+                    <button id="preset2" class="type-btn" style="flex: 1;">2</button>
+                    <button id="preset3" class="type-btn" style="flex: 1;">3</button>
+                    <button id="preset4" class="type-btn" style="flex: 1;">4</button>
+                    <button id="preset5" class="type-btn" style="flex: 1;">5</button>
+                    <button id="preset6" class="type-btn" style="flex: 1;">6</button>
+                </div>
+                <div class="control-group" style="display: flex; gap: 8px; max-width: 300px;">
+                    <button id="exportStatic" class="type-btn" style="flex: 1;">EXPORT SVG</button>
+                </div>
+            </div>
         </div>
 
         <div id="svgContainer"></div>
-    </div>
-
-    <div class="export-buttons">
-        <button id="exportStatic" class="export-btn">SVG</button>
-        <button id="exportSettings" class="export-btn">LOG</button>
     </div>
 
     <script src="main.js"></script>
@@ -816,6 +829,534 @@
                 document.body.classList.toggle('fullscreen-output');
             }
         });
+
+        // Add preset functionality
+        const savePresetBtn = document.getElementById('savePreset');
+        const loadPresetBtn = document.getElementById('loadPreset');
+        const presetFile = document.getElementById('presetFile');
+        const preset1Btn = document.getElementById('preset1');
+        const preset2Btn = document.getElementById('preset2');
+        const preset3Btn = document.getElementById('preset3');
+        const preset4Btn = document.getElementById('preset4');
+        const preset5Btn = document.getElementById('preset5');
+        const preset6Btn = document.getElementById('preset6');
+
+        // Save current settings as a preset
+        savePresetBtn.addEventListener('click', () => {
+            const settings = {
+                fontSize: fontSizeSlider.value,
+                spacing: spacingSlider.value,
+                dotDensity: dotDensitySlider.value,
+                dotSize: dotSizeSlider.value,
+                crossThickness: crossThicknessSlider.value,
+                strokeWidth: strokeWidthSlider.value,
+                gridSize: gridSizeSlider.value,
+                gridPull: gridPullSlider.value,
+                animSpeed: animSpeedSlider.value,
+                animAmp: animAmpSlider.value,
+                animRotAmp: animRotAmpSlider.value,
+                animColorAmp: animColorAmpSlider.value,
+                animGridSize: animGridSizeSlider.value,
+                animGridPull: animGridPullSlider.value,
+                morphAmount: morphAmountSlider.value,
+                morphSpeed: morphSpeedSlider.value,
+                nibAngle: nibAngleSlider.value,
+                showPath: showPathSwitch.checked,
+                rotate: rotateSwitch.checked,
+                rotate45: rotate45Switch.checked,
+                gradientFill: gradientFillSwitch.checked,
+                invertGradient: invertGradientSwitch.checked,
+                individualColors: individualColorsSwitch.checked,
+                orderedColors: orderedColorsSwitch.checked,
+                showGrid: showGridSwitch.checked,
+                gridOffset: gridOffsetSwitch.checked,
+                individualMorph: individualMorphSwitch.checked,
+                colorMode: colorModeSwitch.checked,
+                animType: animTypeSelect.value,
+                strokeJoin: strokeJoinSelect.value,
+                pathColor: pathColorSelect.value,
+                gridColor: gridColorSelect.value,
+                colorPalette: colorPaletteSelect.value,
+                markerType: markerType,
+                showMarkers: showMarkersSwitch.checked,
+                yOffset: yOffsetSlider.value,
+                gridStroke: gridStrokeSlider.value,
+                pathZIndex: pathZIndexSwitch.checked,
+                colorCount: colorCountSlider.value,
+                darkMode: darkModeSwitch.checked
+            };
+
+            const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'svgfont_preset.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Load preset from file
+        loadPresetBtn.addEventListener('click', () => {
+            presetFile.click();
+        });
+
+        presetFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const settings = JSON.parse(event.target.result);
+                        applySettings(settings);
+                    } catch (error) {
+                        console.error('Error loading preset:', error);
+                        alert('Invalid preset file');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Function to apply settings
+        function applySettings(settings) {
+            fontSizeSlider.value = settings.fontSize;
+            spacingSlider.value = settings.spacing;
+            dotDensitySlider.value = settings.dotDensity;
+            dotSizeSlider.value = settings.dotSize;
+            crossThicknessSlider.value = settings.crossThickness;
+            strokeWidthSlider.value = settings.strokeWidth;
+            gridSizeSlider.value = settings.gridSize;
+            gridPullSlider.value = settings.gridPull;
+            animSpeedSlider.value = settings.animSpeed;
+            animAmpSlider.value = settings.animAmp;
+            animRotAmpSlider.value = settings.animRotAmp;
+            animColorAmpSlider.value = settings.animColorAmp;
+            animGridSizeSlider.value = settings.animGridSize;
+            animGridPullSlider.value = settings.animGridPull;
+            morphAmountSlider.value = settings.morphAmount;
+            morphSpeedSlider.value = settings.morphSpeed;
+            nibAngleSlider.value = settings.nibAngle;
+            showPathSwitch.checked = settings.showPath;
+            rotateSwitch.checked = settings.rotate;
+            rotate45Switch.checked = settings.rotate45;
+            gradientFillSwitch.checked = settings.gradientFill;
+            invertGradientSwitch.checked = settings.invertGradient;
+            individualColorsSwitch.checked = settings.individualColors;
+            orderedColorsSwitch.checked = settings.orderedColors;
+            showGridSwitch.checked = settings.showGrid;
+            gridOffsetSwitch.checked = settings.gridOffset;
+            individualMorphSwitch.checked = settings.individualMorph;
+            colorModeSwitch.checked = settings.colorMode;
+            animTypeSelect.value = settings.animType;
+            strokeJoinSelect.value = settings.strokeJoin;
+            pathColorSelect.value = settings.pathColor;
+            gridColorSelect.value = settings.gridColor;
+            colorPaletteSelect.value = settings.colorPalette;
+            markerType = settings.markerType;
+            showMarkersSwitch.checked = settings.showMarkers;
+            yOffsetSlider.value = settings.yOffset;
+            gridStrokeSlider.value = settings.gridStroke;
+            pathZIndexSwitch.checked = settings.pathZIndex;
+            colorCountSlider.value = settings.colorCount;
+            darkModeSwitch.checked = settings.darkMode;
+            updateMarkerTypeUI();
+            if (colorModeSwitch.checked) {
+                generateColors();
+            }
+            updateDisplay();
+        }
+
+        // Store presets in localStorage
+        function savePresetToStorage(presetNumber) {
+            const settings = {
+                fontSize: fontSizeSlider.value,
+                spacing: spacingSlider.value,
+                dotDensity: dotDensitySlider.value,
+                dotSize: dotSizeSlider.value,
+                crossThickness: crossThicknessSlider.value,
+                strokeWidth: strokeWidthSlider.value,
+                gridSize: gridSizeSlider.value,
+                gridPull: gridPullSlider.value,
+                animSpeed: animSpeedSlider.value,
+                animAmp: animAmpSlider.value,
+                animRotAmp: animRotAmpSlider.value,
+                animColorAmp: animColorAmpSlider.value,
+                animGridSize: animGridSizeSlider.value,
+                animGridPull: animGridPullSlider.value,
+                morphAmount: morphAmountSlider.value,
+                morphSpeed: morphSpeedSlider.value,
+                nibAngle: nibAngleSlider.value,
+                showPath: showPathSwitch.checked,
+                rotate: rotateSwitch.checked,
+                rotate45: rotate45Switch.checked,
+                gradientFill: gradientFillSwitch.checked,
+                invertGradient: invertGradientSwitch.checked,
+                individualColors: individualColorsSwitch.checked,
+                orderedColors: orderedColorsSwitch.checked,
+                showGrid: showGridSwitch.checked,
+                gridOffset: gridOffsetSwitch.checked,
+                individualMorph: individualMorphSwitch.checked,
+                colorMode: colorModeSwitch.checked,
+                animType: animTypeSelect.value,
+                strokeJoin: strokeJoinSelect.value,
+                pathColor: pathColorSelect.value,
+                gridColor: gridColorSelect.value,
+                colorPalette: colorPaletteSelect.value,
+                markerType: markerType,
+                showMarkers: showMarkersSwitch.checked,
+                yOffset: yOffsetSlider.value,
+                gridStroke: gridStrokeSlider.value,
+                pathZIndex: pathZIndexSwitch.checked,
+                colorCount: colorCountSlider.value,
+                darkMode: darkModeSwitch.checked
+            };
+            localStorage.setItem(`preset${presetNumber}`, JSON.stringify(settings));
+        }
+
+        // Load preset from localStorage
+        function loadPresetFromStorage(presetNumber) {
+            const settings = localStorage.getItem(`preset${presetNumber}`);
+            if (settings) {
+                const parsedSettings = JSON.parse(settings);
+                // Ensure markers are enabled for preset 1
+                if (presetNumber === 1) {
+                    parsedSettings.showMarkers = true;
+                }
+                applySettings(parsedSettings);
+            }
+        }
+
+        // Add click handlers for preset buttons
+        preset1Btn.addEventListener('click', () => {
+            if (event.shiftKey) {
+                savePresetToStorage(1);
+                preset1Btn.classList.add('active');
+            } else {
+                loadPresetFromStorage(1);
+            }
+        });
+
+        preset2Btn.addEventListener('click', () => {
+            if (event.shiftKey) {
+                savePresetToStorage(2);
+                preset2Btn.classList.add('active');
+            } else {
+                loadPresetFromStorage(2);
+            }
+        });
+
+        preset3Btn.addEventListener('click', () => {
+            if (event.shiftKey) {
+                savePresetToStorage(3);
+                preset3Btn.classList.add('active');
+            } else {
+                loadPresetFromStorage(3);
+            }
+        });
+
+        preset4Btn.addEventListener('click', () => {
+            if (event.shiftKey) {
+                savePresetToStorage(4);
+                preset4Btn.classList.add('active');
+            } else {
+                loadPresetFromStorage(4);
+            }
+        });
+
+        preset5Btn.addEventListener('click', () => {
+            if (event.shiftKey) {
+                savePresetToStorage(5);
+                preset5Btn.classList.add('active');
+            } else {
+                loadPresetFromStorage(5);
+            }
+        });
+
+        preset6Btn.addEventListener('click', () => {
+            if (event.shiftKey) {
+                savePresetToStorage(6);
+                preset6Btn.classList.add('active');
+            } else {
+                loadPresetFromStorage(6);
+            }
+        });
+
+        // Update preset button states on load
+        function updatePresetButtonStates() {
+            preset1Btn.classList.toggle('active', localStorage.getItem('preset1') !== null);
+            preset2Btn.classList.toggle('active', localStorage.getItem('preset2') !== null);
+            preset3Btn.classList.toggle('active', localStorage.getItem('preset3') !== null);
+            preset4Btn.classList.toggle('active', localStorage.getItem('preset4') !== null);
+            preset5Btn.classList.toggle('active', localStorage.getItem('preset5') !== null);
+            preset6Btn.classList.toggle('active', localStorage.getItem('preset6') !== null);
+        }
+
+        // Call on page load
+        updatePresetButtonStates();
+
+        // Default preset 1
+        const defaultPreset1 = {
+            "fontSize": "240",
+            "spacing": "1",
+            "dotDensity": "46.8",
+            "dotSize": "33",
+            "crossThickness": "1",
+            "strokeWidth": "5",
+            "gridSize": "20",
+            "gridPull": "0",
+            "animSpeed": "20",
+            "animAmp": "0",
+            "animRotAmp": "110",
+            "animColorAmp": "30",
+            "animGridSize": "0",
+            "animGridPull": "0",
+            "morphAmount": "0",
+            "morphSpeed": "0",
+            "nibAngle": "45",
+            "showPath": false,
+            "rotate": true,
+            "rotate45": false,
+            "gradientFill": true,
+            "invertGradient": true,
+            "individualColors": true,
+            "orderedColors": true,
+            "showGrid": false,
+            "gridOffset": true,
+            "individualMorph": false,
+            "colorMode": true,
+            "animType": "wave",
+            "strokeJoin": "round",
+            "pathColor": "black",
+            "gridColor": "black",
+            "colorPalette": "pink",
+            "markerType": 2,
+            "showMarkers": true,
+            "yOffset": "0",
+            "gridStroke": "1.1",
+            "pathZIndex": false,
+            "colorCount": "101",
+            "darkMode": false
+        };
+
+        // Default preset 4
+        const defaultPreset4 = {
+            "fontSize": "260",
+            "spacing": "1.2",
+            "dotDensity": "32.2",
+            "dotSize": "36.5",
+            "crossThickness": "1",
+            "strokeWidth": "5",
+            "gridSize": "20",
+            "gridPull": "100",
+            "animSpeed": "20",
+            "animAmp": "445",
+            "animRotAmp": "110",
+            "animColorAmp": "10",
+            "animGridSize": "0",
+            "animGridPull": "0",
+            "morphAmount": "0",
+            "morphSpeed": "0",
+            "nibAngle": "45",
+            "showPath": true,
+            "rotate": false,
+            "rotate45": false,
+            "gradientFill": false,
+            "invertGradient": false,
+            "individualColors": true,
+            "orderedColors": true,
+            "showGrid": false,
+            "gridOffset": true,
+            "individualMorph": false,
+            "colorMode": true,
+            "animType": "wave",
+            "strokeJoin": "round",
+            "pathColor": "black",
+            "gridColor": "black",
+            "colorPalette": "mondrian",
+            "markerType": 0,
+            "showMarkers": true,
+            "yOffset": "0",
+            "gridStroke": "1.1",
+            "pathZIndex": true,
+            "colorCount": "75",
+            "darkMode": false
+        };
+
+        // Default preset 5
+        const defaultPreset5 = {
+            "fontSize": "260",
+            "spacing": "1.1",
+            "dotDensity": "49.3",
+            "dotSize": "26",
+            "crossThickness": "1",
+            "strokeWidth": "5",
+            "gridSize": "20",
+            "gridPull": "0",
+            "animSpeed": "20",
+            "animAmp": "0",
+            "animRotAmp": "110",
+            "animColorAmp": "0",
+            "animGridSize": "0",
+            "animGridPull": "0",
+            "morphAmount": "0",
+            "morphSpeed": "0",
+            "nibAngle": "45",
+            "showPath": false,
+            "rotate": false,
+            "rotate45": true,
+            "gradientFill": false,
+            "invertGradient": false,
+            "individualColors": true,
+            "orderedColors": true,
+            "showGrid": false,
+            "gridOffset": true,
+            "individualMorph": false,
+            "colorMode": true,
+            "animType": "wave",
+            "strokeJoin": "round",
+            "pathColor": "black",
+            "gridColor": "black",
+            "colorPalette": "ocean",
+            "markerType": 5,
+            "showMarkers": true,
+            "yOffset": "0",
+            "gridStroke": "1.1",
+            "pathZIndex": false,
+            "colorCount": "10",
+            "darkMode": false
+        };
+
+        // Default preset 6
+        const defaultPreset6 = {
+            "fontSize": "260",
+            "spacing": "1",
+            "dotDensity": "49.3",
+            "dotSize": "16",
+            "crossThickness": "1",
+            "strokeWidth": "5",
+            "gridSize": "20",
+            "gridPull": "0",
+            "animSpeed": "52",
+            "animAmp": "0",
+            "animRotAmp": "0",
+            "animColorAmp": "42",
+            "animGridSize": "0",
+            "animGridPull": "0",
+            "morphAmount": "0",
+            "morphSpeed": "0",
+            "nibAngle": "45",
+            "showPath": false,
+            "rotate": true,
+            "rotate45": true,
+            "gradientFill": false,
+            "invertGradient": false,
+            "individualColors": true,
+            "orderedColors": true,
+            "showGrid": false,
+            "gridOffset": true,
+            "individualMorph": false,
+            "colorMode": true,
+            "animType": "wave",
+            "strokeJoin": "round",
+            "pathColor": "black",
+            "gridColor": "black",
+            "colorPalette": "forest",
+            "markerType": 4,
+            "showMarkers": true,
+            "yOffset": "0",
+            "gridStroke": "1.1",
+            "pathZIndex": false,
+            "colorCount": "8",
+            "darkMode": false
+        };
+
+        // Default preset 3
+        const defaultPreset3 = {
+            "fontSize": "360",
+            "spacing": "1",
+            "dotDensity": "49.6",
+            "dotSize": "13",
+            "crossThickness": "1",
+            "strokeWidth": "5",
+            "gridSize": "20",
+            "gridPull": "0",
+            "animSpeed": "19",
+            "animAmp": "0",
+            "animRotAmp": "0",
+            "animColorAmp": "42",
+            "animGridSize": "0",
+            "animGridPull": "0",
+            "morphAmount": "0",
+            "morphSpeed": "0",
+            "nibAngle": "46",
+            "showPath": false,
+            "rotate": true,
+            "rotate45": true,
+            "gradientFill": false,
+            "invertGradient": false,
+            "individualColors": true,
+            "orderedColors": true,
+            "showGrid": false,
+            "gridOffset": true,
+            "individualMorph": false,
+            "colorMode": true,
+            "animType": "wave",
+            "strokeJoin": "round",
+            "pathColor": "black",
+            "gridColor": "black",
+            "colorPalette": "mountains",
+            "markerType": 5,
+            "showMarkers": true,
+            "yOffset": "8",
+            "gridStroke": "1.1",
+            "pathZIndex": false,
+            "colorCount": "33",
+            "darkMode": false
+        };
+
+        // If no preset 1 exists, save the default one
+        if (!localStorage.getItem('preset1')) {
+            localStorage.setItem('preset1', JSON.stringify(defaultPreset1));
+            updatePresetButtonStates();
+        }
+
+        // If no preset 4 exists, save the default one
+        if (!localStorage.getItem('preset4')) {
+            localStorage.setItem('preset4', JSON.stringify(defaultPreset4));
+            updatePresetButtonStates();
+        }
+
+        // If no preset 5 exists, save the default one
+        if (!localStorage.getItem('preset5')) {
+            localStorage.setItem('preset5', JSON.stringify(defaultPreset5));
+            updatePresetButtonStates();
+        }
+
+        // If no preset 6 exists, save the default one
+        if (!localStorage.getItem('preset6')) {
+            localStorage.setItem('preset6', JSON.stringify(defaultPreset6));
+            updatePresetButtonStates();
+        }
+
+        // If no preset 3 exists, save the default one
+        if (!localStorage.getItem('preset3')) {
+            localStorage.setItem('preset3', JSON.stringify(defaultPreset3));
+            updatePresetButtonStates();
+        }
+
+        // Load preset 1 on page load
+        loadPresetFromStorage(1);
+
+        // Ensure showMarkers is enabled
+        showMarkersSwitch.checked = true;
+        updateDisplay();
+
+        // Clear and reset preset 3
+        localStorage.removeItem('preset3');
+        localStorage.setItem('preset3', JSON.stringify(defaultPreset3));
+        updatePresetButtonStates();
     </script>
 </body>
 
