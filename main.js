@@ -1946,3 +1946,703 @@ function animateMorph() {
 // Update display on input changes
 animGridSizeSlider.addEventListener("input", updateDisplay);
 animGridPullSlider.addEventListener("input", updateDisplay);
+
+// Add keyboard event listener for randomization
+document.addEventListener("keydown", (e) => {
+  // Don't trigger if the event is from a text input
+  if (e.target.tagName === "INPUT" && e.target.type === "text") {
+    return;
+  }
+  if (e.key.toLowerCase() === "r") {
+    // Randomize settings
+    fontSizeSlider.value = Math.floor(Math.random() * (1000 - 50) + 50);
+    spacingSlider.value = (Math.random() * 1.5 + 0.5).toFixed(1);
+    dotDensitySlider.value = (Math.random() * 49 + 1).toFixed(1);
+    dotSizeSlider.value = (Math.random() * 49 + 1).toFixed(1);
+    crossThicknessSlider.value = (Math.random() * 49 + 1).toFixed(1);
+    strokeWidthSlider.value = (Math.random() * 19.9 + 0.1).toFixed(1);
+    gridSizeSlider.value = Math.floor(Math.random() * 16 + 5);
+    gridPullSlider.value = Math.floor(Math.random() * 101);
+    animSpeedSlider.value = Math.floor(Math.random() * 101);
+    animAmpSlider.value = Math.floor(Math.random() * 501);
+    animRotAmpSlider.value = Math.floor(Math.random() * 501);
+    animColorAmpSlider.value = Math.floor(Math.random() * 51);
+    animGridSizeSlider.value = Math.floor(Math.random() * 101);
+    animGridPullSlider.value = Math.floor(Math.random() * 101);
+    morphAmountSlider.value = Math.floor(Math.random() * 101);
+    morphSpeedSlider.value = Math.floor(Math.random() * 101);
+    nibAngleSlider.value = Math.floor(Math.random() * 181);
+
+    // Randomize switches
+    showPathSwitch.checked = Math.random() > 0.5;
+    rotateSwitch.checked = Math.random() > 0.5;
+    rotate45Switch.checked = Math.random() > 0.5;
+    gradientFillSwitch.checked = Math.random() > 0.5;
+    invertGradientSwitch.checked = Math.random() > 0.5;
+    individualColorsSwitch.checked = Math.random() > 0.5;
+    orderedColorsSwitch.checked = Math.random() > 0.5;
+    showGridSwitch.checked = Math.random() > 0.5;
+    gridOffsetSwitch.checked = Math.random() > 0.5;
+    individualMorphSwitch.checked = Math.random() > 0.5;
+    colorModeSwitch.checked = Math.random() > 0.5;
+
+    // Randomize selects
+    const animTypes = ["wave", "pulse", "spiral", "bounce", "random"];
+    animTypeSelect.value =
+      animTypes[Math.floor(Math.random() * animTypes.length)];
+
+    const strokeJoins = ["round", "miter", "bevel"];
+    strokeJoinSelect.value =
+      strokeJoins[Math.floor(Math.random() * strokeJoins.length)];
+
+    const pathColors = ["black", "white", "red", "blue", "green"];
+    pathColorSelect.value =
+      pathColors[Math.floor(Math.random() * pathColors.length)];
+
+    const gridColors = ["black", "white", "red", "blue", "green"];
+    gridColorSelect.value =
+      gridColors[Math.floor(Math.random() * gridColors.length)];
+
+    const colorPalettes = Object.keys(COLOR_PALETTES);
+    const randomPalette =
+      colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+    colorPaletteSelect.value = randomPalette;
+
+    // Randomize marker type
+    const markerTypes = [0, 1, 2, 4, 5]; // Exclude custom (3)
+    markerType = markerTypes[Math.floor(Math.random() * markerTypes.length)];
+    updateMarkerTypeUI();
+
+    // Update display
+    if (colorModeSwitch.checked) {
+      generateColors();
+    }
+    updateDisplay();
+  }
+});
+
+// Add keyboard event listener for fullscreen output
+document.addEventListener("keydown", (e) => {
+  // Don't trigger if the event is from a text input
+  if (e.target.tagName === "INPUT" && e.target.type === "text") {
+    return;
+  }
+  if (e.key.toLowerCase() === "f") {
+    document.body.classList.toggle("fullscreen-output");
+  }
+});
+
+// Add preset functionality
+const savePresetBtn = document.getElementById("savePreset");
+const loadPresetBtn = document.getElementById("loadPreset");
+const presetFile = document.getElementById("presetFile");
+const preset1Btn = document.getElementById("preset1");
+const preset2Btn = document.getElementById("preset2");
+const preset3Btn = document.getElementById("preset3");
+const preset4Btn = document.getElementById("preset4");
+const preset5Btn = document.getElementById("preset5");
+const preset6Btn = document.getElementById("preset6");
+
+// Save current settings as a preset
+savePresetBtn.addEventListener("click", () => {
+  const settings = {
+    fontSize: fontSizeSlider.value,
+    spacing: spacingSlider.value,
+    dotDensity: dotDensitySlider.value,
+    dotSize: dotSizeSlider.value,
+    crossThickness: crossThicknessSlider.value,
+    strokeWidth: strokeWidthSlider.value,
+    gridSize: gridSizeSlider.value,
+    gridPull: gridPullSlider.value,
+    animSpeed: animSpeedSlider.value,
+    animAmp: animAmpSlider.value,
+    animRotAmp: animRotAmpSlider.value,
+    animColorAmp: animColorAmpSlider.value,
+    animGridSize: animGridSizeSlider.value,
+    animGridPull: animGridPullSlider.value,
+    morphAmount: morphAmountSlider.value,
+    morphSpeed: morphSpeedSlider.value,
+    nibAngle: nibAngleSlider.value,
+    showPath: showPathSwitch.checked,
+    rotate: rotateSwitch.checked,
+    rotate45: rotate45Switch.checked,
+    gradientFill: gradientFillSwitch.checked,
+    invertGradient: invertGradientSwitch.checked,
+    individualColors: individualColorsSwitch.checked,
+    orderedColors: orderedColorsSwitch.checked,
+    showGrid: showGridSwitch.checked,
+    gridOffset: gridOffsetSwitch.checked,
+    individualMorph: individualMorphSwitch.checked,
+    colorMode: colorModeSwitch.checked,
+    animType: animTypeSelect.value,
+    strokeJoin: strokeJoinSelect.value,
+    pathColor: pathColorSelect.value,
+    gridColor: gridColorSelect.value,
+    colorPalette: colorPaletteSelect.value,
+    markerType: markerType,
+    showMarkers: showMarkersSwitch.checked,
+    yOffset: yOffsetSlider.value,
+    gridStroke: gridStrokeSlider.value,
+    pathZIndex: pathZIndexSwitch.checked,
+    colorCount: colorCountSlider.value,
+    darkMode: darkModeSwitch.checked,
+  };
+
+  const blob = new Blob([JSON.stringify(settings, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "svgfont_preset.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+// Load preset from file
+loadPresetBtn.addEventListener("click", () => {
+  presetFile.click();
+});
+
+presetFile.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const settings = JSON.parse(event.target.result);
+        applySettings(settings);
+      } catch (error) {
+        console.error("Error loading preset:", error);
+        alert("Invalid preset file");
+      }
+    };
+    reader.readAsText(file);
+  }
+});
+
+// Function to apply settings
+function applySettings(settings) {
+  fontSizeSlider.value = settings.fontSize;
+  spacingSlider.value = settings.spacing;
+  dotDensitySlider.value = settings.dotDensity;
+  dotSizeSlider.value = settings.dotSize;
+  crossThicknessSlider.value = settings.crossThickness;
+  strokeWidthSlider.value = settings.strokeWidth;
+  gridSizeSlider.value = settings.gridSize;
+  gridPullSlider.value = settings.gridPull;
+  animSpeedSlider.value = settings.animSpeed;
+  animAmpSlider.value = settings.animAmp;
+  animRotAmpSlider.value = settings.animRotAmp;
+  animColorAmpSlider.value = settings.animColorAmp;
+  animGridSizeSlider.value = settings.animGridSize;
+  animGridPullSlider.value = settings.animGridPull;
+  morphAmountSlider.value = settings.morphAmount;
+  morphSpeedSlider.value = settings.morphSpeed;
+  nibAngleSlider.value = settings.nibAngle;
+  showPathSwitch.checked = settings.showPath;
+  rotateSwitch.checked = settings.rotate;
+  rotate45Switch.checked = settings.rotate45;
+  gradientFillSwitch.checked = settings.gradientFill;
+  invertGradientSwitch.checked = settings.invertGradient;
+  individualColorsSwitch.checked = settings.individualColors;
+  orderedColorsSwitch.checked = settings.orderedColors;
+  showGridSwitch.checked = settings.showGrid;
+  gridOffsetSwitch.checked = settings.gridOffset;
+  individualMorphSwitch.checked = settings.individualMorph;
+  colorModeSwitch.checked = settings.colorMode;
+  animTypeSelect.value = settings.animType;
+  strokeJoinSelect.value = settings.strokeJoin;
+  pathColorSelect.value = settings.pathColor;
+  gridColorSelect.value = settings.gridColor;
+  colorPaletteSelect.value = settings.colorPalette;
+  markerType = settings.markerType;
+  showMarkersSwitch.checked = settings.showMarkers;
+  yOffsetSlider.value = settings.yOffset;
+  gridStrokeSlider.value = settings.gridStroke;
+  pathZIndexSwitch.checked = settings.pathZIndex;
+  colorCountSlider.value = settings.colorCount;
+  darkModeSwitch.checked = settings.darkMode;
+  updateMarkerTypeUI();
+  if (colorModeSwitch.checked) {
+    generateColors();
+  }
+  updateDisplay();
+}
+
+// Store presets in localStorage
+function savePresetToStorage(presetNumber) {
+  const settings = {
+    fontSize: fontSizeSlider.value,
+    spacing: spacingSlider.value,
+    dotDensity: dotDensitySlider.value,
+    dotSize: dotSizeSlider.value,
+    crossThickness: crossThicknessSlider.value,
+    strokeWidth: strokeWidthSlider.value,
+    gridSize: gridSizeSlider.value,
+    gridPull: gridPullSlider.value,
+    animSpeed: animSpeedSlider.value,
+    animAmp: animAmpSlider.value,
+    animRotAmp: animRotAmpSlider.value,
+    animColorAmp: animColorAmpSlider.value,
+    animGridSize: animGridSizeSlider.value,
+    animGridPull: animGridPullSlider.value,
+    morphAmount: morphAmountSlider.value,
+    morphSpeed: morphSpeedSlider.value,
+    nibAngle: nibAngleSlider.value,
+    showPath: showPathSwitch.checked,
+    rotate: rotateSwitch.checked,
+    rotate45: rotate45Switch.checked,
+    gradientFill: gradientFillSwitch.checked,
+    invertGradient: invertGradientSwitch.checked,
+    individualColors: individualColorsSwitch.checked,
+    orderedColors: orderedColorsSwitch.checked,
+    showGrid: showGridSwitch.checked,
+    gridOffset: gridOffsetSwitch.checked,
+    individualMorph: individualMorphSwitch.checked,
+    colorMode: colorModeSwitch.checked,
+    animType: animTypeSelect.value,
+    strokeJoin: strokeJoinSelect.value,
+    pathColor: pathColorSelect.value,
+    gridColor: gridColorSelect.value,
+    colorPalette: colorPaletteSelect.value,
+    markerType: markerType,
+    showMarkers: showMarkersSwitch.checked,
+    yOffset: yOffsetSlider.value,
+    gridStroke: gridStrokeSlider.value,
+    pathZIndex: pathZIndexSwitch.checked,
+    colorCount: colorCountSlider.value,
+    darkMode: darkModeSwitch.checked,
+  };
+  localStorage.setItem(`preset${presetNumber}`, JSON.stringify(settings));
+}
+
+// Load preset from localStorage
+function loadPresetFromStorage(presetNumber) {
+  const settings = localStorage.getItem(`preset${presetNumber}`);
+  if (settings) {
+    const parsedSettings = JSON.parse(settings);
+    // Ensure markers are enabled for preset 1
+    if (presetNumber === 1) {
+      parsedSettings.showMarkers = true;
+    }
+    applySettings(parsedSettings);
+  }
+}
+
+// Add click handlers for preset buttons
+preset1Btn.addEventListener("click", () => {
+  if (event.shiftKey) {
+    savePresetToStorage(1);
+  } else {
+    loadPresetFromStorage(1);
+  }
+  // Remove active class from all buttons
+  [
+    preset1Btn,
+    preset2Btn,
+    preset3Btn,
+    preset4Btn,
+    preset5Btn,
+    preset6Btn,
+  ].forEach((btn) => btn.classList.remove("active"));
+  // Add active class to clicked button
+  preset1Btn.classList.add("active");
+});
+
+preset2Btn.addEventListener("click", () => {
+  if (event.shiftKey) {
+    savePresetToStorage(2);
+  } else {
+    loadPresetFromStorage(2);
+  }
+  [
+    preset1Btn,
+    preset2Btn,
+    preset3Btn,
+    preset4Btn,
+    preset5Btn,
+    preset6Btn,
+  ].forEach((btn) => btn.classList.remove("active"));
+  preset2Btn.classList.add("active");
+});
+
+preset3Btn.addEventListener("click", () => {
+  if (event.shiftKey) {
+    savePresetToStorage(3);
+  } else {
+    loadPresetFromStorage(3);
+  }
+  [
+    preset1Btn,
+    preset2Btn,
+    preset3Btn,
+    preset4Btn,
+    preset5Btn,
+    preset6Btn,
+  ].forEach((btn) => btn.classList.remove("active"));
+  preset3Btn.classList.add("active");
+});
+
+preset4Btn.addEventListener("click", () => {
+  if (event.shiftKey) {
+    savePresetToStorage(4);
+  } else {
+    loadPresetFromStorage(4);
+  }
+  [
+    preset1Btn,
+    preset2Btn,
+    preset3Btn,
+    preset4Btn,
+    preset5Btn,
+    preset6Btn,
+  ].forEach((btn) => btn.classList.remove("active"));
+  preset4Btn.classList.add("active");
+});
+
+preset5Btn.addEventListener("click", () => {
+  if (event.shiftKey) {
+    savePresetToStorage(5);
+  } else {
+    loadPresetFromStorage(5);
+  }
+  [
+    preset1Btn,
+    preset2Btn,
+    preset3Btn,
+    preset4Btn,
+    preset5Btn,
+    preset6Btn,
+  ].forEach((btn) => btn.classList.remove("active"));
+  preset5Btn.classList.add("active");
+});
+
+preset6Btn.addEventListener("click", () => {
+  if (event.shiftKey) {
+    savePresetToStorage(6);
+  } else {
+    loadPresetFromStorage(6);
+  }
+  [
+    preset1Btn,
+    preset2Btn,
+    preset3Btn,
+    preset4Btn,
+    preset5Btn,
+    preset6Btn,
+  ].forEach((btn) => btn.classList.remove("active"));
+  preset6Btn.classList.add("active");
+});
+
+// Update preset button states on load
+function updatePresetButtonStates() {
+  // Remove active class from all buttons first
+  [
+    preset1Btn,
+    preset2Btn,
+    preset3Btn,
+    preset4Btn,
+    preset5Btn,
+    preset6Btn,
+  ].forEach((btn) => btn.classList.remove("active"));
+
+  // Only set preset 1 as active by default
+  preset1Btn.classList.add("active");
+
+  // Update the visual indicators for saved presets
+  preset1Btn.classList.toggle(
+    "saved",
+    localStorage.getItem("preset1") !== null
+  );
+  preset2Btn.classList.toggle(
+    "saved",
+    localStorage.getItem("preset2") !== null
+  );
+  preset3Btn.classList.toggle(
+    "saved",
+    localStorage.getItem("preset3") !== null
+  );
+  preset4Btn.classList.toggle(
+    "saved",
+    localStorage.getItem("preset4") !== null
+  );
+  preset5Btn.classList.toggle(
+    "saved",
+    localStorage.getItem("preset5") !== null
+  );
+  preset6Btn.classList.toggle(
+    "saved",
+    localStorage.getItem("preset6") !== null
+  );
+}
+
+// Call on page load
+updatePresetButtonStates();
+
+// Select preset 1 by default
+preset1Btn.classList.add("active");
+
+// Default preset 1
+const defaultPreset1 = {
+  fontSize: "240",
+  spacing: "1",
+  dotDensity: "46.8",
+  dotSize: "33",
+  crossThickness: "1",
+  strokeWidth: "5",
+  gridSize: "20",
+  gridPull: "0",
+  animSpeed: "20",
+  animAmp: "0",
+  animRotAmp: "110",
+  animColorAmp: "30",
+  animGridSize: "0",
+  animGridPull: "0",
+  morphAmount: "0",
+  morphSpeed: "0",
+  nibAngle: "45",
+  showPath: false,
+  rotate: true,
+  rotate45: false,
+  gradientFill: true,
+  invertGradient: true,
+  individualColors: true,
+  orderedColors: true,
+  showGrid: false,
+  gridOffset: true,
+  individualMorph: false,
+  colorMode: true,
+  animType: "wave",
+  strokeJoin: "round",
+  pathColor: "black",
+  gridColor: "black",
+  colorPalette: "pink",
+  markerType: 2,
+  showMarkers: true,
+  yOffset: "0",
+  gridStroke: "1.1",
+  pathZIndex: false,
+  colorCount: "101",
+  darkMode: false,
+};
+
+// Default preset 4
+const defaultPreset4 = {
+  fontSize: "260",
+  spacing: "1.2",
+  dotDensity: "32.2",
+  dotSize: "36.5",
+  crossThickness: "1",
+  strokeWidth: "5",
+  gridSize: "20",
+  gridPull: "100",
+  animSpeed: "20",
+  animAmp: "445",
+  animRotAmp: "110",
+  animColorAmp: "10",
+  animGridSize: "0",
+  animGridPull: "0",
+  morphAmount: "0",
+  morphSpeed: "0",
+  nibAngle: "45",
+  showPath: true,
+  rotate: false,
+  rotate45: false,
+  gradientFill: false,
+  invertGradient: false,
+  individualColors: true,
+  orderedColors: true,
+  showGrid: false,
+  gridOffset: true,
+  individualMorph: false,
+  colorMode: true,
+  animType: "wave",
+  strokeJoin: "round",
+  pathColor: "black",
+  gridColor: "black",
+  colorPalette: "mondrian",
+  markerType: 0,
+  showMarkers: true,
+  yOffset: "0",
+  gridStroke: "1.1",
+  pathZIndex: true,
+  colorCount: "75",
+  darkMode: false,
+};
+
+// Default preset 5
+const defaultPreset5 = {
+  fontSize: "260",
+  spacing: "1.1",
+  dotDensity: "49.3",
+  dotSize: "26",
+  crossThickness: "1",
+  strokeWidth: "5",
+  gridSize: "20",
+  gridPull: "0",
+  animSpeed: "20",
+  animAmp: "0",
+  animRotAmp: "110",
+  animColorAmp: "0",
+  animGridSize: "0",
+  animGridPull: "0",
+  morphAmount: "0",
+  morphSpeed: "0",
+  nibAngle: "45",
+  showPath: false,
+  rotate: false,
+  rotate45: true,
+  gradientFill: false,
+  invertGradient: false,
+  individualColors: true,
+  orderedColors: true,
+  showGrid: false,
+  gridOffset: true,
+  individualMorph: false,
+  colorMode: true,
+  animType: "wave",
+  strokeJoin: "round",
+  pathColor: "black",
+  gridColor: "black",
+  colorPalette: "ocean",
+  markerType: 5,
+  showMarkers: true,
+  yOffset: "0",
+  gridStroke: "1.1",
+  pathZIndex: false,
+  colorCount: "10",
+  darkMode: false,
+};
+
+// Default preset 6
+const defaultPreset6 = {
+  fontSize: "260",
+  spacing: "1",
+  dotDensity: "49.3",
+  dotSize: "16",
+  crossThickness: "1",
+  strokeWidth: "5",
+  gridSize: "20",
+  gridPull: "0",
+  animSpeed: "52",
+  animAmp: "0",
+  animRotAmp: "0",
+  animColorAmp: "42",
+  animGridSize: "0",
+  animGridPull: "0",
+  morphAmount: "0",
+  morphSpeed: "0",
+  nibAngle: "45",
+  showPath: false,
+  rotate: true,
+  rotate45: true,
+  gradientFill: false,
+  invertGradient: false,
+  individualColors: true,
+  orderedColors: true,
+  showGrid: false,
+  gridOffset: true,
+  individualMorph: false,
+  colorMode: true,
+  animType: "wave",
+  strokeJoin: "round",
+  pathColor: "black",
+  gridColor: "black",
+  colorPalette: "forest",
+  markerType: 4,
+  showMarkers: true,
+  yOffset: "0",
+  gridStroke: "1.1",
+  pathZIndex: false,
+  colorCount: "8",
+  darkMode: false,
+};
+
+// Default preset 3
+const defaultPreset3 = {
+  fontSize: "360",
+  spacing: "1",
+  dotDensity: "49.6",
+  dotSize: "13",
+  crossThickness: "1",
+  strokeWidth: "5",
+  gridSize: "20",
+  gridPull: "0",
+  animSpeed: "19",
+  animAmp: "0",
+  animRotAmp: "0",
+  animColorAmp: "42",
+  animGridSize: "0",
+  animGridPull: "0",
+  morphAmount: "0",
+  morphSpeed: "0",
+  nibAngle: "46",
+  showPath: false,
+  rotate: true,
+  rotate45: true,
+  gradientFill: false,
+  invertGradient: false,
+  individualColors: true,
+  orderedColors: true,
+  showGrid: false,
+  gridOffset: true,
+  individualMorph: false,
+  colorMode: true,
+  animType: "wave",
+  strokeJoin: "round",
+  pathColor: "black",
+  gridColor: "black",
+  colorPalette: "mountains",
+  markerType: 5,
+  showMarkers: true,
+  yOffset: "8",
+  gridStroke: "1.1",
+  pathZIndex: false,
+  colorCount: "33",
+  darkMode: false,
+};
+
+// If no preset 1 exists, save the default one
+if (!localStorage.getItem("preset1")) {
+  localStorage.setItem("preset1", JSON.stringify(defaultPreset1));
+  updatePresetButtonStates();
+}
+
+// If no preset 4 exists, save the default one
+if (!localStorage.getItem("preset4")) {
+  localStorage.setItem("preset4", JSON.stringify(defaultPreset4));
+  updatePresetButtonStates();
+}
+
+// If no preset 5 exists, save the default one
+if (!localStorage.getItem("preset5")) {
+  localStorage.setItem("preset5", JSON.stringify(defaultPreset5));
+  updatePresetButtonStates();
+}
+
+// If no preset 6 exists, save the default one
+if (!localStorage.getItem("preset6")) {
+  localStorage.setItem("preset6", JSON.stringify(defaultPreset6));
+  updatePresetButtonStates();
+}
+
+// If no preset 3 exists, save the default one
+if (!localStorage.getItem("preset3")) {
+  localStorage.setItem("preset3", JSON.stringify(defaultPreset3));
+  updatePresetButtonStates();
+}
+
+// Load preset 1 on page load
+loadPresetFromStorage(1);
+
+// Ensure showMarkers is enabled
+showMarkersSwitch.checked = true;
+updateDisplay();
+
+// Clear and reset preset 3
+localStorage.removeItem("preset3");
+localStorage.setItem("preset3", JSON.stringify(defaultPreset3));
+updatePresetButtonStates();

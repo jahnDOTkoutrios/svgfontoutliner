@@ -1,0 +1,414 @@
+@font-face {
+    font-family: 'G2ErikaMono';
+    src: url('G2-Erika-Mono.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'G2ErikaMono', monospace;
+    max-width: 100%;
+    margin: 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+    font-size: 12px;
+    font-weight: normal;
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    text-transform: uppercase;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    overflow: hidden;
+}
+
+body.dark {
+    background-color: #1a1a1a;
+}
+
+.container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#textInput, #textInput2 {
+    width: 100%;
+    padding: 12px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: white;
+    font-family: 'G2ErikaMono', monospace;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    outline: none;
+    font-weight: normal;
+    text-transform: none;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
+body.dark #textInput, body.dark #textInput2 {
+    background-color: #2a2a2a;
+    color: #fff;
+}
+
+#svgContainer {
+    width: 100%;
+    flex: 1;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body.dark #svgContainer {
+    background-color: #1a1a1a;
+}
+
+.controls {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    border: none;
+    position: relative;
+}
+
+body.dark .controls {
+    background-color: transparent;
+}
+
+.control-section {
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 0;
+    border: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body.dark .control-section {
+    background-color: #2a2a2a;
+}
+
+.control-section h3 {
+    margin: 0 0 16px 0;
+    font-size: 12px;
+    color: #666;
+    padding-bottom: 0;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+body.dark .control-section h3 {
+    color: #999;
+    font-weight: normal;
+}
+
+.control-group {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.control-group label {
+    font-size: 12px;
+    color: #666;
+    transition: color 0.3s ease;
+    text-align: left;
+    font-family: 'G2ErikaMono', monospace;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+body.dark .control-group label {
+    color: #999;
+}
+
+.control-group input[type="range"] {
+    width: 150px;
+    height: 4px;
+    -webkit-appearance: none;
+    background: #e0e0e0;
+    border-radius: 2px;
+    outline: none;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+body.dark .control-group input[type="range"] {
+    background: #404040;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    background: #000000;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+body.dark .control-group input[type="range"]::-webkit-slider-thumb {
+    background: #FFFFFF;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.control-group span {
+    text-align: right;
+    font-size: 12px;
+    color: #666;
+    transition: color 0.3s ease;
+    font-family: 'G2ErikaMono', monospace;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+body.dark .control-group span {
+    color: #999;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 1px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e0e0e0;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+}
+
+body.dark .slider {
+    background-color: #404040;
+}
+
+input:checked+.slider {
+    background-color: #000000;
+}
+
+body.dark input:checked+.slider {
+    background-color: #FFFFFF;
+}
+
+.slider:hover {
+    transform: scale(1.1);
+}
+
+.export-buttons {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+    justify-content: flex-end;
+}
+
+.export-btn {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'G2ErikaMono', monospace;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.export-btn:hover {
+    background-color: #333333;
+    transform: translateY(-1px);
+}
+
+body.dark .export-btn {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+body.dark .export-btn:hover {
+    background-color: #CCCCCC;
+}
+
+.control-group select {
+    width: 155px;
+    height: 22px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 4px;
+    padding: 0 8px;
+    font-size: 12px;
+    color: #666;
+    font-family: 'G2ErikaMono', monospace;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+body.dark .control-group select {
+    background-color: #404040;
+    color: #999;
+}
+
+.control-group select:focus {
+    background-color: #d0d0d0;
+}
+
+body.dark .control-group select:focus {
+    background-color: #505050;
+}
+
+.type-btn {
+    background-color: #e0e0e0;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #666;
+    transition: all 0.3s ease;
+    font-family: 'G2ErikaMono', monospace;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+body.dark .type-btn {
+    background-color: #404040;
+    color: #999;
+}
+
+.type-btn:hover {
+    background-color: #d0d0d0;
+    transform: translateY(-1px);
+}
+
+body.dark .type-btn:hover {
+    background-color: #505050;
+}
+
+.type-btn.active {
+    background-color: #000000;
+    color: white;
+}
+
+body.dark .type-btn.active {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+.type-text {
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'G2ErikaMono', monospace;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+body.dark .type-text {
+    color: #999;
+}
+
+.type-text:hover {
+    color: #000000;
+}
+
+body.dark .type-text:hover {
+    color: #FFFFFF;
+}
+
+.type-text.active {
+    color: #000000;
+}
+
+body.dark .type-text.active {
+    color: #FFFFFF;
+}
+
+.fullscreen-output .controls,
+.fullscreen-output .export-buttons {
+    display: none !important;
+}
+.fullscreen-output #svgContainer {
+    position: fixed !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    background: #f8f9fa;
+    z-index: 1000;
+}
+.fullscreen-output #svgContainer svg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    padding: 5vh 5vw !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    margin: auto !important;
+    transform-origin: center !important;
+}
+body.dark.fullscreen-output #svgContainer {
+    background: #1a1a1a;
+}

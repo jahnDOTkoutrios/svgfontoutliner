@@ -16,6 +16,31 @@ A web-based tool for creative SVG font exploration, animation, and export.
 - **Randomization**: Press `R` to randomize most settings (except y-offset and show markers). Marker randomization never selects custom SVG. Color palette selection is robust.
 - **Fullscreen/Output-Only Mode**: Press `F` to hide all UI and make the SVG output fill the window. Press `F` again to restore the UI.
 
+## Presets
+
+The application includes a preset system that allows you to save and load different configurations:
+
+### Using Presets
+
+- Click any preset button (1-6) to load that preset
+- Hold Shift and click a preset button to save your current settings to that preset
+- The active preset is shown with a black background (white in dark mode)
+- Presets are saved in your browser's local storage
+
+### Default Presets
+
+- **Preset 1**: Default configuration with pink gradient and heart markers
+- **Preset 2**: Customizable (no default)
+- **Preset 3**: Mountain color palette with nib markers
+- **Preset 4**: Mondrian color palette with dot markers
+- **Preset 5**: Ocean color palette with square markers
+- **Preset 6**: Forest color palette with cross markers
+
+### Export/Import Presets
+
+- Click "SAVE PRESET" to download your current settings as a JSON file
+- Click "LOAD PRESET" to import a previously saved preset file
+
 ## Usage
 
 1. Open `index.html` in your browser.
