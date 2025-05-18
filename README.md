@@ -23,18 +23,7 @@ The application includes a preset system that allows you to save and load differ
 ### Using Presets
 
 - Click any preset button (1-6) to load that preset
-- Hold Shift and click a preset button to save your current settings to that preset
 - The active preset is shown with a black background (white in dark mode)
-- Presets are saved in your browser's local storage
-
-### Default Presets
-
-- **Preset 1**: Default configuration with pink gradient and heart markers
-- **Preset 2**: Customizable (no default)
-- **Preset 3**: Mountain color palette with nib markers
-- **Preset 4**: Mondrian color palette with dot markers
-- **Preset 5**: Ocean color palette with square markers
-- **Preset 6**: Forest color palette with cross markers
 
 ### Export/Import Presets
 
@@ -63,7 +52,3 @@ The application includes a preset system that allows you to save and load differ
 
 - All logic is in `main.js` and `index.html`.
 - No build step required; just open in a browser.
-
----
-
-Enjoy exploring creative SVG typography!
