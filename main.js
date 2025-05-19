@@ -2587,3 +2587,57 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
+
+// Add font upload functionality
+const uploadFontBtn = document.getElementById("uploadFont");
+const fontFile = document.getElementById("fontFile");
+
+uploadFontBtn.addEventListener("click", () => {
+  fontFile.click();
+});
+
+fontFile.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      // Parse the SVG document
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(
+        event.target.result,
+        "image/svg+xml"
+      );
+
+      // Find all glyph elements
+      const glyphs = svgDoc.querySelectorAll("glyph");
+
+      // Clear existing font data
+      fontData = {};
+
+      // Extract path data for each character
+      glyphs.forEach((glyph) => {
+        const unicode = glyph.getAttribute("unicode");
+        if (unicode && unicode.length === 1) {
+          const char = unicode;
+          const path = glyph.getAttribute("d");
+          const width = parseFloat(glyph.getAttribute("horiz-adv-x") || "1000");
+
+          if (path) {
+            // Split the path data into individual paths
+            const paths = path.split(/(?=M)/).filter((p) => p.trim());
+
+            fontData[char] = {
+              paths: paths,
+              width: width,
+            };
+          }
+        }
+      });
+
+      // Update the display with the new font
+      generateColors();
+      updateDisplay();
+    };
+    reader.readAsText(file);
+  }
+});
