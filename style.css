@@ -11,7 +11,7 @@ body {
     margin: 0;
     padding: 10px;
     background-color: #f8f9fa;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, padding 0.5s ease;
     font-size: 12px;
     font-weight: normal;
     box-sizing: border-box;
@@ -38,6 +38,14 @@ body.dark {
     flex: 1;
     display: flex;
     flex-direction: column;
+}
+
+.ui-container {
+    width: 100%;
+    transition: all 0.5s ease;
+    transform-origin: top;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 #textInput, #textInput2 {
@@ -73,7 +81,7 @@ body.dark #textInput, body.dark #textInput2 {
     padding: 10px;
     margin-bottom: 10px;
     background-color: #f8f9fa;
-    transition: all 0.3s ease;
+    transition: all 0.5s ease;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -93,10 +101,13 @@ body.dark #svgContainer {
     padding: 0;
     background-color: transparent;
     border-radius: 0;
-    transition: all 0.3s ease;
+    transition: all 0.5s ease;
     box-sizing: border-box;
     border: none;
     position: relative;
+    transform-origin: top;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 body.dark .controls {
@@ -384,31 +395,86 @@ body.dark .type-text.active {
     color: #FFFFFF;
 }
 
-.fullscreen-output .controls,
-.fullscreen-output .export-buttons {
-    display: none !important;
+.fullscreen-output {
+    padding: 0;
 }
-.fullscreen-output #svgContainer {
-    position: fixed !important;
-    top: 0; left: 0; right: 0; bottom: 0;
-    width: 100vw !important;
-    height: 100vh !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    background: #f8f9fa;
+
+.fullscreen-output .controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
     z-index: 1000;
 }
-.fullscreen-output #svgContainer svg {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-    padding: 5vh 5vw !important;
-    box-sizing: border-box !important;
-    display: block !important;
-    margin: auto !important;
-    transform-origin: center !important;
+
+.fullscreen-output .controls:hover {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
 }
+
+.fullscreen-output #svgContainer {
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    height: 100vh;
+}
+
+.fullscreen-output #svgContainer svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 body.dark.fullscreen-output #svgContainer {
     background: #1a1a1a;
+}
+
+.fullscreen-output #textInput,
+.fullscreen-output #textInput2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+    margin: 0;
+    border-radius: 0;
+}
+
+.fullscreen-output .controls:hover ~ #textInput,
+.fullscreen-output .controls:hover ~ #textInput2,
+.fullscreen-output #textInput:hover,
+.fullscreen-output #textInput2:hover {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.fullscreen-output .ui-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.fullscreen-output .ui-container:hover {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.fullscreen-output #textInput,
+.fullscreen-output #textInput2 {
+    margin: 0;
+    border-radius: 0;
 }

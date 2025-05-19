@@ -2570,3 +2570,20 @@ presetFile.addEventListener("change", (e) => {
     reader.readAsText(file);
   }
 });
+
+// Add hotkey support for presets
+document.addEventListener("keydown", (e) => {
+  // Don't trigger if we're in a text input
+  if (e.target.tagName === "INPUT" && e.target.type === "text") {
+    return;
+  }
+
+  // Check for number keys 1-6
+  const presetNumber = parseInt(e.key);
+  if (presetNumber >= 1 && presetNumber <= 6) {
+    const presetButton = document.getElementById(`preset${presetNumber}`);
+    if (presetButton) {
+      presetButton.click();
+    }
+  }
+});
