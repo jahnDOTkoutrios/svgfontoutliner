@@ -22,7 +22,7 @@ The application includes a preset system that allows you to save and load differ
 
 ### Using Presets
 
-- Click any preset button (1-6) to load that preset
+- Click any preset button (176) to load that preset
 - The active preset is shown with a black background (white in dark mode)
 
 ### Export/Import Presets
@@ -52,3 +52,11 @@ The application includes a preset system that allows you to save and load differ
 
 - All logic is in `main.js` and `index.html`.
 - No build step required; just open in a browser.
+
+## Credits
+
+- Hershey fonts from [@kamalmostafa/hershey-fonts](https://github.com/kamalmostafa/hershey-fonts)
+
+## HOW TO EXPORT SVG FONTS
+
+- SVG font export tool from [@jahnDOTkoutrios/svg_font_export](https://github.com/jahnDOTkoutrios/svg_font_export)

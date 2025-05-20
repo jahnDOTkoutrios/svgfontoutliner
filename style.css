@@ -27,7 +27,7 @@ body {
 }
 
 body.dark {
-    background-color: #1a1a1a;
+    background-color: #000000;
 }
 
 .container {
@@ -89,7 +89,7 @@ body.dark #textInput, body.dark #textInput2 {
 }
 
 body.dark #svgContainer {
-    background-color: #1a1a1a;
+    background-color: #000000;
 }
 
 .controls {
@@ -430,7 +430,7 @@ body.dark .type-text.active {
 }
 
 body.dark.fullscreen-output #svgContainer {
-    background: #1a1a1a;
+    background: #000000;
 }
 
 .fullscreen-output #textInput,
@@ -477,4 +477,21 @@ body.dark.fullscreen-output #svgContainer {
 .fullscreen-output #textInput2 {
     margin: 0;
     border-radius: 0;
+}
+
+.preset-buttons {
+    display: flex;
+    gap: 8px;
+    max-width: 300px;
+}
+
+.help-btn {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }

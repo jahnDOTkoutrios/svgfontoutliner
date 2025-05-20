@@ -53,6 +53,23 @@
                         <input type="range" id="yOffset" min="-200" max="200" step="1" value="0">
                     </div>
                     <div class="control-group">
+                        <label for="fontSelect">Font</label>
+                        <select id="fontSelect">
+                            <option value="240415_Chesa.svg">Chesa</option>
+                            <option value="HersheySans1.svg">Sans 1</option>
+                            <option value="HersheySansMed.svg">Sans Medium</option>
+                            <option value="HersheyScript1.svg">Script 1</option>
+                            <option value="HersheyScriptMed.svg">Script Medium</option>
+                            <option value="HersheySerifBold.svg">Serif Bold</option>
+                            <option value="HersheySerifBoldItalic.svg">Serif Bold Italic</option>
+                            <option value="HersheySerifMed.svg">Serif Medium</option>
+                            <option value="HersheySerifMedItalic.svg">Serif Medium Italic</option>
+                            <option value="HersheyGothEnglish.svg">Gothic English</option>
+                            <option value="HersheyGothGerman.svg">Gothic German</option>
+                            <option value="HersheyGothItalian.svg">Gothic Italian</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
                         <label for="morphAmount">Morph</label>
                         <input type="range" id="morphAmount" min="0" max="100" step="1" value="0">
                     </div>
@@ -317,13 +334,15 @@
                         <button id="loadPreset" class="type-btn" style="flex: 1;">LOAD PRESET</button>
                         <input type="file" id="presetFile" accept=".json" style="display: none;">
                     </div>
-                    <div class="control-group" style="display: flex; gap: 8px; max-width: 300px;">
+                    <div class="preset-buttons">
                         <button id="preset1" class="type-btn" style="flex: 1;">1</button>
                         <button id="preset2" class="type-btn" style="flex: 1;">2</button>
                         <button id="preset3" class="type-btn" style="flex: 1;">3</button>
                         <button id="preset4" class="type-btn" style="flex: 1;">4</button>
                         <button id="preset5" class="type-btn" style="flex: 1;">5</button>
                         <button id="preset6" class="type-btn" style="flex: 1;">6</button>
+                        <button id="preset7" class="type-btn" style="flex: 1;">7</button>
+                        <a href="https://github.com/jahnDOTkoutrios/svgfontoutliner" target="_blank" class="type-btn help-btn">?</a>
                     </div>
                     <div class="control-group" style="display: flex; gap: 8px; max-width: 300px;">
                         <button id="exportStatic" class="type-btn" style="flex: 1;">EXPORT SVG</button>

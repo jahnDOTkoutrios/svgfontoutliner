@@ -156,6 +156,7 @@ const preset3Btn = document.getElementById("preset3");
 const preset4Btn = document.getElementById("preset4");
 const preset5Btn = document.getElementById("preset5");
 const preset6Btn = document.getElementById("preset6");
+const preset7Btn = document.getElementById("preset7");
 let customMarkerSVG = null;
 let animationFrame = null;
 let startTime = null;
@@ -431,6 +432,9 @@ fetch("240415_Chesa.svg")
     console.error("Error loading SVG font:", error);
   });
 
+// Load the default font
+loadFont("240415_Chesa.svg");
+
 function getPointsAlongPaths(paths, spacing) {
   if (!paths || paths.length === 0) return [];
 
@@ -471,6 +475,63 @@ function getPointsAlongPaths(paths, spacing) {
 }
 
 const colorPaletteSelect = document.getElementById("colorPalette");
+const fontSelect = document.getElementById("fontSelect");
+
+// Add font selection handler
+fontSelect.addEventListener("change", () => {
+  const selectedFont = fontSelect.value;
+  loadFont(selectedFont);
+});
+
+// Function to load a font
+function loadFont(fontName) {
+  const fontPath =
+    fontName === "240415_Chesa.svg" ? fontName : `hershey/${fontName}`;
+  fetch(fontPath)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then((svgText) => {
+      // Parse the SVG document
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svgText, "image/svg+xml");
+
+      // Find all glyph elements
+      const glyphs = svgDoc.querySelectorAll("glyph");
+
+      // Clear existing font data
+      fontData = {};
+
+      // Extract path data for each character
+      glyphs.forEach((glyph) => {
+        const unicode = glyph.getAttribute("unicode");
+        if (unicode && unicode.length === 1) {
+          const char = unicode;
+          const path = glyph.getAttribute("d");
+          const width = parseFloat(glyph.getAttribute("horiz-adv-x") || "1000");
+
+          if (path) {
+            // Split the path data into individual paths
+            const paths = path.split(/(?=M)/).filter((p) => p.trim());
+
+            fontData[char] = {
+              paths: paths,
+              width: width,
+            };
+          }
+        }
+      });
+
+      generateColors();
+      updateDisplay();
+    })
+    .catch((error) => {
+      console.error("Error loading SVG font:", error);
+    });
+}
 
 colorPaletteSelect.addEventListener("change", () => {
   generateColors();
@@ -2364,6 +2425,48 @@ const presets = {
     colorCount: "23",
     darkMode: false,
   },
+  7: {
+    fontSize: "240",
+    spacing: "0.9",
+    dotDensity: "50",
+    dotSize: "14.5",
+    crossThickness: "1.5",
+    strokeWidth: "5",
+    gridSize: "11",
+    gridPull: "100",
+    animSpeed: "20",
+    animAmp: "0",
+    animRotAmp: "0",
+    animColorAmp: "0",
+    animGridSize: "0",
+    animGridPull: "0",
+    morphAmount: "1",
+    morphSpeed: "18",
+    nibAngle: "90",
+    showPath: false,
+    rotate: false,
+    rotate45: false,
+    gradientFill: false,
+    invertGradient: false,
+    individualColors: true,
+    orderedColors: true,
+    showGrid: false,
+    gridOffset: true,
+    individualMorph: true,
+    colorMode: true,
+    animType: "bounce",
+    strokeJoin: "round",
+    pathColor: "black",
+    gridColor: "black",
+    colorPalette: "white",
+    markerType: 5,
+    showMarkers: true,
+    yOffset: "0",
+    gridStroke: "1.1",
+    pathZIndex: false,
+    colorCount: "8",
+    darkMode: true,
+  },
 };
 
 // Simple function to load a preset
@@ -2379,6 +2482,7 @@ function loadPreset(presetNumber) {
       preset4Btn,
       preset5Btn,
       preset6Btn,
+      preset7Btn,
     ].forEach((btn) => btn.classList.remove("active"));
     document.getElementById(`preset${presetNumber}`).classList.add("active");
     updateDisplay();
@@ -2481,6 +2585,14 @@ preset6Btn.addEventListener("click", (event) => {
   }
 });
 
+preset7Btn.addEventListener("click", (event) => {
+  if (event.shiftKey) {
+    savePreset(7);
+  } else {
+    loadPreset(7);
+  }
+});
+
 // Load preset 1 on page load
 document.addEventListener("DOMContentLoaded", () => {
   loadPreset(1);
@@ -2578,9 +2690,9 @@ document.addEventListener("keydown", (e) => {
     return;
   }
 
-  // Check for number keys 1-6
+  // Check for number keys 1-7
   const presetNumber = parseInt(e.key);
-  if (presetNumber >= 1 && presetNumber <= 6) {
+  if (presetNumber >= 1 && presetNumber <= 7) {
     const presetButton = document.getElementById(`preset${presetNumber}`);
     if (presetButton) {
       presetButton.click();
