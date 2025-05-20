@@ -16,42 +16,20 @@ A web-based tool for creative SVG font exploration, animation, and export.
 - **Randomization**: Press `R` to randomize most settings (except y-offset and show markers). Marker randomization never selects custom SVG. Color palette selection is robust.
 - **Fullscreen/Output-Only Mode**: Press `F` to hide all UI and make the SVG output fill the window. Press `F` again to restore the UI.
 
-## Presets
-
-The application includes a preset system that allows you to save and load different configurations:
-
-### Using Presets
-
-- Click any preset button (176) to load that preset
-- The active preset is shown with a black background (white in dark mode)
-
 ### Export/Import Presets
 
 - Click "SAVE PRESET" to download your current settings as a JSON file
 - Click "LOAD PRESET" to import a previously saved preset file
 
-## Usage
-
-1. Open `index.html` in your browser.
-2. Type two words in the input fields.
-3. Adjust controls in the Basics, Markers, Grid, Animation, and Theme sections.
-4. Use the randomization (`R`) and fullscreen (`F`) keyboard shortcuts for creative exploration.
-5. Export your SVG or settings as needed.
-
 ## Keyboard Shortcuts
 
 - `R`: Randomize most settings (except y-offset and show markers; custom marker is never selected).
 - `F`: Toggle fullscreen/output-only mode.
+- `1-7`: Toggle Presets.
 
 ## Customization
 
 - Add your own SVG font or marker by uploading via the UI.
-- Extend color palettes in `main.js` and the UI as desired.
-
-## Development
-
-- All logic is in `main.js` and `index.html`.
-- No build step required; just open in a browser.
 
 ## Credits
 

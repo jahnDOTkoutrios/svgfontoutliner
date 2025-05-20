@@ -75,21 +75,16 @@ body.dark #textInput, body.dark #textInput2 {
 
 #svgContainer {
     width: 100%;
-    flex: 1;
-    border: none;
-    border-radius: 6px;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f8f9fa;
-    transition: all 0.5s ease;
-    box-sizing: border-box;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    position: relative;
 }
 
 body.dark #svgContainer {
-    background-color: #000000;
+    background-color: transparent;
 }
 
 .controls {
@@ -149,6 +144,10 @@ body.dark .control-section h3 {
     align-items: center;
     gap: 12px;
     margin-bottom: 8px;
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
 }
 
 .control-group label {
@@ -399,7 +398,7 @@ body.dark .type-text.active {
     padding: 0;
 }
 
-.fullscreen-output .controls {
+body.fullscreen-output .controls {
     position: fixed;
     top: 0;
     left: 0;
@@ -408,33 +407,35 @@ body.dark .type-text.active {
     opacity: 0;
     pointer-events: none;
     z-index: 1000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.fullscreen-output .controls:hover {
+body.fullscreen-output .controls:hover {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
 }
 
-.fullscreen-output #svgContainer {
+body.fullscreen-output #svgContainer {
     margin: 0;
     padding: 0;
     border-radius: 0;
     height: 100vh;
+    background: transparent;
 }
 
-.fullscreen-output #svgContainer svg {
+body.fullscreen-output #svgContainer svg {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
 body.dark.fullscreen-output #svgContainer {
-    background: #000000;
+    background: transparent;
 }
 
-.fullscreen-output #textInput,
-.fullscreen-output #textInput2 {
+body.fullscreen-output #textInput,
+body.fullscreen-output #textInput2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -445,18 +446,19 @@ body.dark.fullscreen-output #svgContainer {
     z-index: 1000;
     margin: 0;
     border-radius: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.fullscreen-output .controls:hover ~ #textInput,
-.fullscreen-output .controls:hover ~ #textInput2,
-.fullscreen-output #textInput:hover,
-.fullscreen-output #textInput2:hover {
+body.fullscreen-output .controls:hover ~ #textInput,
+body.fullscreen-output .controls:hover ~ #textInput2,
+body.fullscreen-output #textInput:hover,
+body.fullscreen-output #textInput2:hover {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
 }
 
-.fullscreen-output .ui-container {
+body.fullscreen-output .ui-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -465,9 +467,10 @@ body.dark.fullscreen-output #svgContainer {
     opacity: 0;
     pointer-events: none;
     z-index: 1000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.fullscreen-output .ui-container:hover {
+body.fullscreen-output .ui-container:hover {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
@@ -483,15 +486,42 @@ body.dark.fullscreen-output #svgContainer {
     display: flex;
     gap: 8px;
     max-width: 300px;
+    margin-bottom: 8px;
 }
 
 .help-btn {
-    flex: 0 0 auto;
+    position: fixed;
+    top: 19px;
+    right: 20px;
     width: 22px;
     height: 22px;
-    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #e0e0e0;
+    color: #666;
     text-decoration: none;
+    border-radius: 4px;
+    font-family: 'G2ErikaMono', monospace;
+    font-weight: normal;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.help-btn:hover {
+    background-color: #d0d0d0;
+    transform: translateY(-1px);
+}
+
+body.dark .help-btn {
+    background-color: #404040;
+    color: #999;
+}
+
+body.dark .help-btn:hover {
+    background-color: #505050;
+}
+
+.fullscreen-output .help-btn {
+    display: none;
 }
