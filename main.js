@@ -522,7 +522,7 @@ function getPointsAlongPaths(paths, spacing) {
     const length = pathElement.getTotalLength();
 
     // Invert and scale the spacing value for wider range, with a minimum spacing of 0.001
-    const adjustedSpacing = Math.max(0.001, (51 - spacing) * 1.5); // Convert from 0.1-50.999 to 75-0.0015
+    const adjustedSpacing = Math.max(0.001, (51 - spacing) * 6); // Convert from 0.1-50.999 to 300-0.006
     const numPoints = Math.ceil(length / adjustedSpacing);
     const points = [];
 
@@ -2249,7 +2249,7 @@ const presets = {
   1: {
     fontSize: "240",
     spacing: "1",
-    dotDensity: "25",
+    dotDensity: "44", // was 42
     dotSize: "3.5",
     crossThickness: "1",
     strokeWidth: "5",
@@ -2291,7 +2291,7 @@ const presets = {
   2: {
     fontSize: "240",
     spacing: "1",
-    dotDensity: "24",
+    dotDensity: "43", // was 41
     dotSize: "25.5",
     crossThickness: "1",
     strokeWidth: "5",
@@ -2333,7 +2333,7 @@ const presets = {
   3: {
     fontSize: "270",
     spacing: "1",
-    dotDensity: "26",
+    dotDensity: "45", // was 43
     dotSize: "21.5",
     crossThickness: "1",
     strokeWidth: "5",
@@ -2375,7 +2375,7 @@ const presets = {
   4: {
     fontSize: "240",
     spacing: "1",
-    dotDensity: "26",
+    dotDensity: "45", // was 43
     dotSize: "9.5",
     crossThickness: "6.5",
     strokeWidth: "5",
@@ -2417,7 +2417,7 @@ const presets = {
   5: {
     fontSize: "240",
     spacing: "1",
-    dotDensity: "25",
+    dotDensity: "44", // was 42
     dotSize: "14.5",
     crossThickness: "1",
     strokeWidth: "5",
@@ -2459,7 +2459,7 @@ const presets = {
   6: {
     fontSize: "300",
     spacing: "1.1",
-    dotDensity: "24",
+    dotDensity: "43", // was 41
     dotSize: "21",
     crossThickness: "1",
     strokeWidth: "5",
@@ -2501,7 +2501,7 @@ const presets = {
   7: {
     fontSize: "240",
     spacing: "0.9",
-    dotDensity: "26",
+    dotDensity: "45", // was 43
     dotSize: "14.5",
     crossThickness: "1.5",
     strokeWidth: "5",
@@ -2543,7 +2543,7 @@ const presets = {
   8: {
     fontSize: "380",
     spacing: "1",
-    dotDensity: "28",
+    dotDensity: "46", // was 44
     dotSize: "1.5",
     crossThickness: "1",
     strokeWidth: "0.8",
