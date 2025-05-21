@@ -101,6 +101,79 @@ const COLOR_PALETTES = {
   mondrian: ["#FF0000", "#0000FF", "#FFFF00", "#FFFFFF", "#000000"],
   fire: ["#FF0000", "#FF4500", "#FF8C00", "#FFA500", "#FFD700"],
   ice: ["#E3F2FD", "#BBDEFB", "#90CAF9", "#64B5F6", "#42A5F5"],
+  // New palettes
+  retro: [
+    "#FF6B6B", // Coral Red
+    "#4ECDC4", // Turquoise
+    "#45B7D1", // Sky Blue
+    "#96CEB4", // Sage Green
+    "#FFEEAD", // Cream
+    "#D4A5A5", // Dusty Rose
+  ],
+  cyberpunk: [
+    "#FF00FF", // Magenta
+    "#00FFFF", // Cyan
+    "#FF0000", // Red
+    "#00FF00", // Green
+    "#FFFF00", // Yellow
+    "#0000FF", // Blue
+  ],
+  autumn: [
+    "#D35400", // Pumpkin
+    "#E67E22", // Carrot
+    "#F39C12", // Orange
+    "#F1C40F", // Sunflower
+    "#D4AC0D", // Golden
+    "#B7950B", // Bronze
+  ],
+  spring: [
+    "#FF69B4", // Hot Pink
+    "#FF1493", // Deep Pink
+    "#FFB6C1", // Light Pink
+    "#98FB98", // Pale Green
+    "#87CEEB", // Sky Blue
+    "#DDA0DD", // Plum
+  ],
+  winter: [
+    "#B0E0E6", // Powder Blue
+    "#ADD8E6", // Light Blue
+    "#E0FFFF", // Light Cyan
+    "#F0FFFF", // Azure
+    "#F5F5F5", // White Smoke
+    "#E6E6FA", // Lavender
+  ],
+  metallic: [
+    "#C0C0C0", // Silver
+    "#BDB76B", // Dark Khaki
+    "#DAA520", // Goldenrod
+    "#CD853F", // Peru
+    "#D2B48C", // Tan
+    "#DEB887", // Burlywood
+  ],
+  jewel: [
+    "#4B0082", // Indigo
+    "#800080", // Purple
+    "#FF00FF", // Magenta
+    "#00FFFF", // Cyan
+    "#FFD700", // Gold
+    "#C0C0C0", // Silver
+  ],
+  vintage: [
+    "#8B4513", // Saddle Brown
+    "#A0522D", // Sienna
+    "#CD853F", // Peru
+    "#DEB887", // Burlywood
+    "#D2B48C", // Tan
+    "#F5DEB3", // Wheat
+  ],
+  neon2: [
+    "#FF1493", // Deep Pink
+    "#00FF7F", // Spring Green
+    "#1E90FF", // Dodger Blue
+    "#FFD700", // Gold
+    "#FF4500", // Orange Red
+    "#9400D3", // Dark Violet
+  ],
 };
 
 let fontData = {};
@@ -1883,7 +1956,11 @@ function updateDisplay() {
     const offset = gridOffsetSwitch.checked ? gridSize / 2 : 0;
 
     // Create vertical lines
-    for (let x = -padding + 1; x <= width + padding + 1; x += gridSize) {
+    for (
+      let x = -padding + 1 + offset;
+      x <= width + padding + 1;
+      x += gridSize
+    ) {
       const line = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "line"
@@ -1898,7 +1975,11 @@ function updateDisplay() {
     }
 
     // Create horizontal lines
-    for (let y = -padding + 1; y <= height + padding + 1; y += gridSize) {
+    for (
+      let y = -padding + 1 + offset;
+      y <= height + padding + 1;
+      y += gridSize
+    ) {
       const line = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "line"
@@ -2459,6 +2540,48 @@ const presets = {
     colorCount: "8",
     darkMode: true,
   },
+  8: {
+    fontSize: "380",
+    spacing: "1",
+    dotDensity: "28",
+    dotSize: "1.5",
+    crossThickness: "1",
+    strokeWidth: "0.8",
+    gridSize: "11",
+    gridPull: "0",
+    animSpeed: "20",
+    animAmp: "0",
+    animRotAmp: "110",
+    animColorAmp: "0",
+    animGridSize: "0",
+    animGridPull: "0",
+    morphAmount: "84",
+    morphSpeed: "18",
+    nibAngle: "0",
+    showPath: true,
+    rotate: false,
+    rotate45: true,
+    gradientFill: false,
+    invertGradient: false,
+    individualColors: true,
+    orderedColors: true,
+    showGrid: false,
+    gridOffset: true,
+    individualMorph: true,
+    colorMode: true,
+    animType: "bounce",
+    strokeJoin: "bevel",
+    pathColor: "blue",
+    gridColor: "black",
+    colorPalette: "green",
+    markerType: 0,
+    showMarkers: true,
+    yOffset: "23",
+    gridStroke: "1.1",
+    pathZIndex: false,
+    colorCount: "163",
+    darkMode: true,
+  },
 };
 
 // Simple function to load a preset
@@ -2475,6 +2598,7 @@ function loadPreset(presetNumber) {
       preset5Btn,
       preset6Btn,
       preset7Btn,
+      document.getElementById("preset8"),
     ].forEach((btn) => btn.classList.remove("active"));
     document.getElementById(`preset${presetNumber}`).classList.add("active");
     updateDisplay();
@@ -2743,5 +2867,31 @@ fontFile.addEventListener("change", (e) => {
       updateDisplay();
     };
     reader.readAsText(file);
+  }
+});
+
+// Add preset8 button event listener
+document.getElementById("preset8").addEventListener("click", (event) => {
+  if (event.shiftKey) {
+    savePreset(8);
+  } else {
+    loadPreset(8);
+  }
+});
+
+// Add hotkey for preset 8
+document.addEventListener("keydown", (e) => {
+  // Don't trigger if we're in a text input
+  if (e.target.tagName === "INPUT" && e.target.type === "text") {
+    return;
+  }
+
+  // Check for number keys 1-8
+  const presetNumber = parseInt(e.key);
+  if (presetNumber >= 1 && presetNumber <= 8) {
+    const presetButton = document.getElementById(`preset${presetNumber}`);
+    if (presetButton) {
+      presetButton.click();
+    }
   }
 });
