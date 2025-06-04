@@ -559,7 +559,10 @@ fontSelect.addEventListener("change", () => {
 // Function to load a font
 function loadFont(fontName) {
   const fontPath =
-    fontName === "240415_Chesa.svg" ? fontName : `hershey/${fontName}`;
+    fontName === "240415_Chesa.svg" ||
+    fontName === "250603_Offgrid-variable_ROUNDED_SINGLE_LINE.svg"
+      ? fontName
+      : `hershey/${fontName}`;
   fetch(fontPath)
     .then((response) => {
       if (!response.ok) {
