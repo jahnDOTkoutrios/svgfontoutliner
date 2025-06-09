@@ -463,7 +463,7 @@ function generateColors() {
 }
 
 // Load and parse the SVG font
-fetch("240415_Chesa.svg")
+fetch("250609_Chesa_REGULAR.svg")
   .then((response) => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -506,7 +506,7 @@ fetch("240415_Chesa.svg")
   });
 
 // Load the default font
-loadFont("240415_Chesa.svg");
+loadFont("250609_Chesa_REGULAR.svg");
 
 function getPointsAlongPaths(paths, spacing) {
   if (!paths || paths.length === 0) return [];
@@ -559,7 +559,8 @@ fontSelect.addEventListener("change", () => {
 // Function to load a font
 function loadFont(fontName) {
   const fontPath =
-    fontName === "240415_Chesa.svg" ||
+    fontName === "250609_Chesa_REGULAR.svg" ||
+    fontName === "250609_Chesa_SERIF.svg" ||
     fontName === "250603_Offgrid-variable_ROUNDED_SINGLE_LINE.svg"
       ? fontName
       : `hershey/${fontName}`;
