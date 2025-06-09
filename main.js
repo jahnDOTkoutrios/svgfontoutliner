@@ -239,6 +239,9 @@ let morphDirection = 1;
 
 const exportStaticBtn = document.getElementById("exportStatic");
 
+const bgColorPicker = document.getElementById("bgColor");
+const colorPreview = document.querySelector(".color-preview");
+
 // Update display on input changes
 fontSizeSlider.addEventListener("input", updateDisplay);
 dotDensitySlider.addEventListener("input", updateDisplay);
@@ -256,6 +259,15 @@ spacingSlider.addEventListener("input", updateDisplay);
 nibAngleSlider.addEventListener("input", updateDisplay);
 darkModeSwitch.addEventListener("change", () => {
   document.body.classList.toggle("dark");
+  if (!document.body.classList.contains("dark")) {
+    const color = bgColorPicker.value;
+    document.body.style.backgroundColor = color;
+    colorPreview.style.backgroundColor = color;
+  } else {
+    document.body.style.backgroundColor = "#000000";
+    colorPreview.style.backgroundColor = "#000000";
+  }
+  updateDisplay();
 });
 gridSizeSlider.addEventListener("input", updateDisplay);
 gridPullSlider.addEventListener("input", updateDisplay);
@@ -561,7 +573,7 @@ function loadFont(fontName) {
   const fontPath =
     fontName === "250609_Chesa_REGULAR.svg" ||
     fontName === "250609_Chesa_SERIF.svg" ||
-    fontName === "250603_Offgrid-variable_ROUNDED_SINGLE_LINE.svg"
+    fontName === "250604_Offgrid-variable_ROUNDED_SINGLE_LINE.svg"
       ? fontName
       : `hershey/${fontName}`;
   fetch(fontPath)
@@ -2228,8 +2240,13 @@ function applySettings(settings) {
   // Update dark mode
   if (settings.darkMode) {
     document.body.classList.add("dark");
+    document.body.style.backgroundColor = "#000000";
+    colorPreview.style.backgroundColor = "#000000";
   } else {
     document.body.classList.remove("dark");
+    const color = bgColorPicker.value;
+    document.body.style.backgroundColor = color;
+    colorPreview.style.backgroundColor = color;
   }
 
   // Generate colors if color mode is on
@@ -2897,5 +2914,25 @@ document.addEventListener("keydown", (e) => {
     if (presetButton) {
       presetButton.click();
     }
+  }
+});
+
+// Update background color when picker changes
+bgColorPicker.addEventListener("input", (e) => {
+  const color = e.target.value;
+  document.body.style.backgroundColor = color;
+  colorPreview.style.backgroundColor = color;
+});
+
+// Initialize background color
+document.body.style.backgroundColor = bgColorPicker.value;
+colorPreview.style.backgroundColor = bgColorPicker.value;
+
+// Add background color picker event listener
+bgColorPicker.addEventListener("input", () => {
+  if (!document.body.classList.contains("dark")) {
+    const color = bgColorPicker.value;
+    document.body.style.backgroundColor = color;
+    colorPreview.style.backgroundColor = color;
   }
 });

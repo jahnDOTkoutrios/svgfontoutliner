@@ -10,7 +10,7 @@ body {
     max-width: 100%;
     margin: 0;
     padding: 10px;
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     transition: background-color 0.3s ease, padding 0.5s ease;
     font-size: 12px;
     font-weight: normal;
@@ -55,7 +55,7 @@ body.dark {
     margin-bottom: 10px;
     border: none;
     border-radius: 6px;
-    background-color: white;
+    background-color: #f8f9fa;
     font-family: 'G2ErikaMono', monospace;
     transition: all 0.3s ease;
     box-sizing: border-box;
@@ -110,7 +110,7 @@ body.dark .controls {
 }
 
 .control-section {
-    background-color: white;
+    background-color: #f8f9fa;
     border-radius: 12px;
     padding: 16px;
     margin: 0;
@@ -264,8 +264,8 @@ body.dark input:checked+.slider {
 }
 
 .export-btn {
-    background-color: #000000;
-    color: white;
+    background-color: #ffffff;
+    color: #000000;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
@@ -281,7 +281,7 @@ body.dark input:checked+.slider {
 }
 
 .export-btn:hover {
-    background-color: #333333;
+    background-color: #f0f0f0;
     transform: translateY(-1px);
 }
 
@@ -297,7 +297,7 @@ body.dark .export-btn:hover {
 .control-group select {
     width: 155px;
     height: 22px;
-    background-color: #e0e0e0;
+    background-color: #ffffff;
     border: none;
     border-radius: 4px;
     padding: 0 8px;
@@ -319,7 +319,7 @@ body.dark .control-group select {
 }
 
 .control-group select:focus {
-    background-color: #d0d0d0;
+    background-color: #f0f0f0;
 }
 
 body.dark .control-group select:focus {
@@ -327,27 +327,27 @@ body.dark .control-group select:focus {
 }
 
 .type-btn {
-    background-color: #e0e0e0;
+    background-color: #ffffff;
     border: none;
     padding: 4px 8px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
-    color: #666;
+    color: #000000;
     transition: all 0.3s ease;
     font-family: 'G2ErikaMono', monospace;
     font-weight: normal;
     text-transform: uppercase;
 }
 
+.type-btn:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-1px);
+}
+
 body.dark .type-btn {
     background-color: #404040;
     color: #999;
-}
-
-.type-btn:hover {
-    background-color: #d0d0d0;
-    transform: translateY(-1px);
 }
 
 body.dark .type-btn:hover {
@@ -489,6 +489,34 @@ body.fullscreen-output .ui-container:hover {
     margin-bottom: 8px;
 }
 
+.preset-btn {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    font-family: 'G2ErikaMono', monospace;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.preset-btn:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-1px);
+}
+
+body.dark .preset-btn {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+body.dark .preset-btn:hover {
+    background-color: #CCCCCC;
+}
+
 .help-btn {
     position: fixed;
     top: 19px;
@@ -498,7 +526,7 @@ body.fullscreen-output .ui-container:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #e0e0e0;
+    background-color: #f8f9fa;
     color: #666;
     text-decoration: none;
     border-radius: 4px;
@@ -524,4 +552,51 @@ body.dark .help-btn:hover {
 
 .fullscreen-output .help-btn {
     display: none;
+}
+
+.color-picker-wrapper {
+    position: relative;
+    width: 10px;
+    height: 10px;
+}
+
+.control-group input[type="color"] {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: none;
+    -webkit-appearance: none;
+    opacity: 0;
+    z-index: 2;
+}
+
+.color-preview {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.color-preview:hover {
+    transform: scale(1.1);
+}
+
+body.dark .color-preview {
+    border-color: #404040;
+}
+
+.control-group input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.control-group input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
 }
